@@ -39,9 +39,9 @@ namespace NTimeline
 
 		#region Publics
 		/// <summary>
-		/// Fügt eine ZeitQuelle zum Zeitstrahl hinzu.
+		/// Adds a time source.
 		/// </summary>
-		/// <param name="timeSource">zeitQuelle die hinzugefügt werden soll</param>
+		/// <param name="timeSource">new time source</param>
 		public void AddTimeSource(ITimeSource timeSource)
 		{
 			if(timeSource == null) throw new ArgumentNullException("timeSource");
@@ -53,9 +53,9 @@ namespace NTimeline
 		}
 
 		/// <summary>
-		/// Entfernt eine ZeitQuelle vom Zeitstrahl.
+		/// Removes a time source from the timeline
 		/// </summary>
-		/// <param name="timeSource">zeitQuelle die entfernt werden soll</param>
+		/// <param name="timeSource">Time source which has to be removed</param>
 		public void RemoveTimeSource(ITimeSource timeSource)
 		{
 			if(timeSource == null) throw new ArgumentNullException("timeSource");
@@ -64,87 +64,78 @@ namespace NTimeline
 		}
 
 		/// <summary>
-		/// Holt die Zeitelemente aller Quellen ein und fügt diese im Zeitstrahl ein.
-		/// Zustätzlich werden alle Quellen über die hinzugefügten Elemente informiert.
+		/// Get all the time elements of every time source and add them to the timeline.
 		/// </summary>
 		public void Generate()
 		{
-			//Alle bestehenden ZeitElemente löschen
+			// Clear current time elements
 			this.TimeElements.Clear();
 
-			//Alle Zeitelemente der Quellen zum Zeitstrahl hinzufügen
+			// Add all time elements of every time source
 			foreach(ITimeSource zeitQuelle in this.TimeSources)
 			{
-				IList<TimeElement> zeitElemente = zeitQuelle.CreateTimeElements();
-				if(zeitElemente == null) continue;
-				foreach(TimeElement zeitElement in zeitElemente)
+				IList<TimeElement> listTimeElement = zeitQuelle.CreateTimeElements();
+				if(listTimeElement == null) continue;
+				foreach(TimeElement timeElement in listTimeElement)
 				{
-					AddOrCompleteZeitElement(zeitElement);
+					AddOrCompleteZeitElement(timeElement);
 				}
 			}
 		}
 
 		/// <summary>
-		/// Gibt eine Liste aller ZeitPerioden zurück, welche auf dem Zeitstrahl eingetragen sind.
-		///  </summary>
-		/// <returns>Liste aller ZeitPerioden. Gibt es keine Einträge auf dem Zeitstrhal, wird eine leere Liste zurückgegeben.</returns>
-		public IList<TimePeriode> BuildTimePeriods()
+		/// Returns a list of time periodes.
+		/// </summary>
+		/// <returns>List with all time periods. If there are no entries on the timeline, then an empty list will be returned.</returns>
+		public IList<TimePeriod> BuildTimePeriods()
 		{
-			IList<TimePeriode> listTimePeriod = new List<TimePeriode>();
+			IList<TimePeriod> listTimePeriod = new List<TimePeriod>();
 
 			if(this.TimeElements.Values.Count == 0) return listTimePeriod;
 
 			for(int i=0; i < this.TimeElements.Values.Count; i++)
 			{
-				//Falls es ein Gültig Ab und ein GültigBis Datum gibt muss eine Zeitperiode mit Start und Ende
-				//an diesem Datum (Eintägig)
-				if(this.TimeElements.Values[i].IsGueltigAb && this.TimeElements.Values[i].IsGueltigBis)
+				// If the current time element is a From and a Until date, then a one day period has to be created.
+				if(this.TimeElements.Values[i].IsFrom && this.TimeElements.Values[i].IsUntil)
 				{
-					//ZeitPeriode erstellen
-					TimePeriode zeitPeriodeEintaegig = CreateZeitPeriode(this.TimeElements.Values[i], this.TimeElements.Values[i]);
-					if(zeitPeriodeEintaegig != null && !listTimePeriod.Contains(zeitPeriodeEintaegig)) listTimePeriod.Add(zeitPeriodeEintaegig);
+					// Create time period for one day
+					TimePeriod timePeriodOneDay = CreateTimePeriod(this.TimeElements.Values[i], this.TimeElements.Values[i]);
+					if(timePeriodOneDay != null && !listTimePeriod.Contains(timePeriodOneDay)) listTimePeriod.Add(timePeriodOneDay);
 				}
 
 				TimeElement timeElement1 = this.TimeElements.Values[i];
 
-				//Das zweite Elemente wird nur gesetzt, falls es noch ein weiteres Element gibt
+				// The second element will only be set, if there exists another one.
 				TimeElement timeElement2 = i < this.TimeElements.Count -1 ? this.TimeElements.Values[i+1] : null;
 
-				//Falls die zwei berücksichtigten ZeitElemente direkt auf einander folgen
-				//Und das vorangehende ein GültigBis sowie das nachfolgende ein GültigAb Datum ist, so muss keine Periode generiert werden
-				//da dies bereits zwei aufeinanderfolgende Perioden darstellt.
-				if(timeElement2 != null && timeElement1.Datum.AddDays(1) == timeElement2.Datum && timeElement1.IsGueltigBis && timeElement2.IsGueltigAb) continue;
+				// if the second time element follows directly after the first time element, there is nothing to do.
+				if(timeElement2 != null && timeElement1.Date.AddDays(1) == timeElement2.Date && timeElement1.IsUntil && timeElement2.IsFrom) continue;
 
-				//Periode erstellen
-				TimePeriode zeitPeriode = CreateZeitPeriode(timeElement1, timeElement2);
-				if(zeitPeriode != null && !listTimePeriod.Contains(zeitPeriode)) listTimePeriod.Add(zeitPeriode);
+				// Create time period
+				TimePeriod timePeriod = CreateTimePeriod(timeElement1, timeElement2);
+				if(timePeriod != null && !listTimePeriod.Contains(timePeriod)) listTimePeriod.Add(timePeriod);
 			}
 
 			return listTimePeriod;
 		}
 
 		/// <summary>
-		/// Gibt eine Liste aller ZeitPerioden zurück, welche auf dem Zeitstrahl eingetragen sind und
-		/// während oder nach dem übergebenen GültigPer Datum gültig sind.
+		/// Returns a list with time periods which are valid during the date or after the date
 		/// </summary>
-		/// <param name="dtGueltigPer">GültigPer Datum</param>
+		/// <param name="dtDate">Date</param>
 		/// <returns></returns>
-		public IList<TimePeriode> BuildTimePeriods(DateTime dtGueltigPer)
+		public IList<TimePeriod> BuildTimePeriods(DateTime dtDate)
 		{
-			IList<TimePeriode> listTimePeriod = BuildTimePeriods();
+			IList<TimePeriod> listTimePeriod = BuildTimePeriods();
 
-			IList<TimePeriode> listValidTimePeriod = new List<TimePeriode>();
+			IList<TimePeriod> listValidTimePeriod = new List<TimePeriod>();
 
-			foreach(TimePeriode zeitPeriode in listTimePeriod)
+			foreach(TimePeriod timePeriod in listTimePeriod)
 			{
-				
-				//Eine Periode muss berücksichtigt, wenn sie während oder nach dem GültigPer-Datum gültig ist.
-				//Weiter gibt es das Szenario, dass eine Periode einen Tag vor dem GültigPer beendet werden kann.
-				//Eine solche Periode muss auch berücksichtigt werden.
-				Duration duration = zeitPeriode.GetPeriode();
-				if((!duration.IsDuration) || (duration.IsDuration && duration.Until >= dtGueltigPer.AddDays(-1)))
+				Duration duration = timePeriod.GetPeriode();
+				if((!duration.IsDuration) || (duration.IsDuration && duration.Until >= dtDate.AddDays(-1)))
 				{
-					listValidTimePeriod.Add(zeitPeriode);
+					listValidTimePeriod.Add(timePeriod);
 				}
 			}
 
@@ -154,49 +145,45 @@ namespace NTimeline
 
 		#region Privates
 		/// <summary>
-		/// Fügt ein ZeitElement in den Zeitstrahl ein, falls das Datum noch nicht im Zeitstrahl erfasst ist.
-		/// Ist das Datum im Zeitstrahl bereits erfasst, so werden dessen Daten denen des übergebenen ZeitElements
-		/// ergänzt.
+		/// Add a time element to the timeline.
 		/// </summary>
-		/// <param name="timeElementNew">Das ZeitElement, welches zum Zeitstrahl hinzugefügt werden soll.</param>
+		/// <param name="timeElementNew">New time element.</param>
 		private void AddOrCompleteZeitElement(TimeElement timeElementNew)
 		{
 			if(timeElementNew == null) throw new ArgumentNullException("timeElementNew");
 
 			TimeElement timeElement;
-			if(this.TimeElements.ContainsKey(timeElementNew.Datum))
+			if(this.TimeElements.ContainsKey(timeElementNew.Date))
 			{
-				timeElement = this.TimeElements[timeElementNew.Datum];
+				timeElement = this.TimeElements[timeElementNew.Date];
 
-				//Gültig ab übernehmen
-				if(timeElementNew.IsGueltigAb) timeElement.IsGueltigAb = true;
+				// Set From
+				if(timeElementNew.IsFrom) timeElement.IsFrom = true;
 
-				//Gültig bis übernehmen
-				if(timeElementNew.IsGueltigBis) timeElement.IsGueltigBis = true;
+				// Set Until
+				if(timeElementNew.IsUntil) timeElement.IsUntil = true;
 			}
 			else
 			{
-				//Das Zeitelement exisitert noch nicht im Zeitstrahl und muss hinzugefügt werden
-				this.TimeElements.Add(timeElementNew.Datum, timeElementNew);
+				this.TimeElements.Add(timeElementNew.Date, timeElementNew);
 			}
 		}
 
 		/// <summary>
-		/// Fragt alle Quellen des Zeitstrahls an, ob sie am Referenzdatum
-		/// relevant sind. Alle relevanten Quellen werden zurückgegeben.
+		/// Asks every time source if they are relevant during the duration.
 		/// </summary>
-		/// <param name="duration">Periode</param>
-		/// <returns>Liste aller relevanten Quellen</returns>
-		private IList<ITimeSource> DetermineZeitQuellen(Duration duration)
+		/// <param name="duration">Duration</param>
+		/// <returns>List of all relevant time sources</returns>
+		private IList<ITimeSource> DetermineTimeSources(Duration duration)
 		{
 			if(duration == null) throw new ArgumentNullException("duration");
 
 			IList<ITimeSource> listTimeSource = new List<ITimeSource>();
-			foreach(ITimeSource zeitQuelle in this.TimeSources)
+			foreach(ITimeSource timeSource in this.TimeSources)
 			{
-				if(zeitQuelle.IsValid(duration) && !listTimeSource.Contains(zeitQuelle))
+				if(timeSource.IsValid(duration) && !listTimeSource.Contains(timeSource))
 				{
-					listTimeSource.Add(zeitQuelle);
+					listTimeSource.Add(timeSource);
 				}
 			}
 
@@ -204,23 +191,22 @@ namespace NTimeline
 		}
 
 		/// <summary>
-		/// Erstellt eine ZeitPeriode und bestimmt die Quellen, welche für die ZeitPeriode
-		/// relevant sind.
+		/// Creates a time period and determin all relevant time sources.
 		/// </summary>
-		/// <param name="timeElementFrom">Ab ZeitElement</param>
-		/// <param name="timeElementUntil">Bis ZeitElement. Falls es kein Bis ZeitElement gibt, wird NULL übergeben.</param>
-		/// <returns>Erstellte Zeitperiode oder NULL, wenn die ZeitPeriode nicht erstellt wurde</returns>
-		private TimePeriode CreateZeitPeriode(TimeElement timeElementFrom, TimeElement timeElementUntil)
+		/// <param name="timeElementFrom">from time element</param>
+		/// <param name="timeElementUntil">until time element. Could be also empty.</param>
+		/// <returns>Created time period or null.</returns>
+		private TimePeriod CreateTimePeriod(TimeElement timeElementFrom, TimeElement timeElementUntil)
 		{
 			if(timeElementFrom == null) throw new ArgumentNullException("timeElementFrom");
 
-			TimePeriode timePeriode = timeElementUntil == null ? new TimePeriode(timeElementFrom) : new TimePeriode(timeElementFrom, timeElementUntil);
+			TimePeriod timePeriod = timeElementUntil == null ? new TimePeriod(timeElementFrom) : new TimePeriod(timeElementFrom, timeElementUntil);
 
-			timePeriode.TimeSources = DetermineZeitQuellen(timePeriode.GetPeriode());
+			timePeriod.TimeSources = DetermineTimeSources(timePeriod.GetPeriode());
 
-			if(timePeriode.TimeSourcesView.Count == 0) return null;
+			if(timePeriod.TimeSourcesView.Count == 0) return null;
 
-			return timePeriode;
+			return timePeriod;
 		}
 		#endregion
 	}

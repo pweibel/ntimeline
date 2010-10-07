@@ -23,16 +23,16 @@ namespace NTimeline.Base
 		{
 			if(context == null) throw new ArgumentNullException("context");
 
-			//Context setzen
+			// Set context
 			this.Context = context;
 
-			//Neuen Zeitstrahl erstellen
+			// Create new timeline
 			this.Timeline = new Timeline(this);
 
-			//ZeitQuellen registrieren (Implementation in Subklasse)
+			// Register new time sources
 			RegisterTimeSources();
 
-			//Den Zeitstrahl generieren lassen
+			// Generate timeline
 			this.Timeline.Generate();
 
 			GenerateTimeElements();

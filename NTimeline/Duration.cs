@@ -4,13 +4,16 @@ namespace NTimeline
 {
 	public class Duration
 	{
+		#region Properties
 		public DateTime From { get; private set; }
 		public DateTime? Until { get; private set; }
 		public bool IsDuration
 		{
 			get { return this.Until.HasValue; }
 		}
+		#endregion
 
+		#region Constructors
 		public Duration(DateTime dtFrom)
 		{
 			this.From = dtFrom;
@@ -21,5 +24,6 @@ namespace NTimeline
 			this.From = dtFrom;
 			this.Until = dtUntil;
 		}
+		#endregion
 	}
 }

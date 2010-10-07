@@ -3,28 +3,26 @@
 namespace NTimeline
 {
 	/// <summary>
-	/// Eine ZeitQuelle dient als Datenlieferant.
-	/// Jeder der Daten für den Zeitstrahl liefern will, muss dieses Interface implementieren.
+	/// A time source provides data for the timeline.
 	/// </summary>
 	public interface ITimeSource
 	{
 		/// <summary>
-		/// Zeitstrahl, bei welchem die Zeitquelle registriert ist.
+		/// Timeline where this source is registered.
 		/// </summary>
 		Timeline Timeline { get; }
 
 		/// <summary>
-		/// Erstellt eine Liste von ZeitElementen.
-		/// Aus welchen Daten diese ZeitElemente generiert werden, hängt von der spezifischen ZeitQuelle ab.
+		/// Creates a list of time elements.
 		/// </summary>
-		/// <returns>Liste von ZeitElementen, falls keine ZeitElemente vorhanden sind, eine leere Liste.</returns>
+		/// <returns>List of time elements. If there are no elements available, the list will be empty.</returns>
 		IList<TimeElement> CreateTimeElements();
 
 		/// <summary>
-		/// Wird vom Zeitstrahl aufgerufen um festzustellen ob eine ZeitQuelle in der Periode gültig ist.
+		/// The timeline calls this method to check, if the time source has valid elements during the period.
 		/// </summary>
-		/// <param name="duration">Periode</param>
-		/// <returns>TRUE, wenn die Quelle in der Periode gültig ist, ansonsten FALSE</returns>
+		/// <param name="duration">Period</param>
+		/// <returns>Returns true if the time source is valid during the period.</returns>
 		bool IsValid(Duration duration);
 	}
 }

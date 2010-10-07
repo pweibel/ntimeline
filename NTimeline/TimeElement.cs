@@ -3,69 +3,59 @@
 namespace NTimeline
 {
 	/// <summary>
-	/// Ein Zeitelement stellt ein Datum in einem Zeitstrahl dar.
-	/// Zusätzlich wird angegeben, ob ein Zeitelement aus einem GülitAb- oder einem GültigBis-Datum
-	/// einer Quelle entstanden ist. Ein ZeitElement kann auch ein GültigAb und ein GültigBis gleichzeitig repräsentieren.
-	/// Zum Beispiel, wenn das selbe DAtum in einer Quelle als GültigAb und in einer anderen Quelle als GültigBis
-	/// eingetragen ist.
+	/// A time element is a date on a timeline.
 	/// </summary>
 	public class TimeElement
 	{
 		#region Fields
-		private DateTime _dtRefDat;
-		private bool _bIsGueltigAb;
-		private bool _bIsGueltigBis;
+		private DateTime _dtDate;
+		private bool _bIsFrom;
+		private bool _bIsUntil;
 		#endregion
 
 		#region Properties
-		public DateTime Datum
+		public DateTime Date
 		{
-			get { return _dtRefDat; }
+			get { return _dtDate; }
 		}
 
-		public bool IsGueltigAb
+		public bool IsFrom
 		{
-			get { return _bIsGueltigAb; }
-			set { _bIsGueltigAb = value; }
+			get { return _bIsFrom; }
+			set { _bIsFrom = value; }
 		}
 
-		public bool IsGueltigBis
+		public bool IsUntil
 		{
-			get { return _bIsGueltigBis; }
-			set { _bIsGueltigBis = value; }
+			get { return _bIsUntil; }
+			set { _bIsUntil = value; }
 		}
 		#endregion
 
 		#region Constructors
-		/// <summary>
-		/// Constructor.
-		/// </summary>
-		/// <param name="dtRefDat">Das Datum im Zeitstrahl</param>
-		/// <param name="bIsGueltigAb">Gibt an ob das Datum ein GueltigAb-Datum ist. Wird hier FALSE übergeben,
-		/// so wird das Datum als GueltigBis-Datum interpretiert.</param>
-		public TimeElement(DateTime dtRefDat, bool bIsGueltigAb)
+		public TimeElement(DateTime dtDate, bool bIsFrom)
 		{
-			_dtRefDat = dtRefDat;
-			_bIsGueltigAb = bIsGueltigAb;
-			_bIsGueltigBis = !bIsGueltigAb;
+			_dtDate = dtDate;
+			_bIsFrom = bIsFrom;
+			_bIsUntil = !bIsFrom;
 		}
 		#endregion
 
 		#region Publics
 		/// <summary>
-		/// Liefert das Datum, welches für eine Periode relevant ist.
+		/// Returns the relevant date for the period.
 		/// </summary>
-		/// <param name="bIsGueltigAb">Gibt an ob das befragte Zeitelement als ein Ab- oder ein Bis-Datum verwendet wird.</param>
-		/// <returns>Für die Periode relevantes Datum</returns>
-		public DateTime GetPeriodenDatum(bool bIsGueltigAb)
+		/// <param name="bIsFrom">Say if the date will be used as a from or until date.</param>
+		/// <returns>Correct Date for the period</returns>
+		public DateTime GetPeriodDate(bool bIsFrom)
 		{
-			DateTime dtPeriodenDatum = this.Datum;
+			DateTime dtPeriodDate = this.Date;
 
-			if(bIsGueltigAb && this.IsGueltigBis) dtPeriodenDatum = dtPeriodenDatum.AddDays(1);
+			if(bIsFrom && this.IsUntil) dtPeriodDate = dtPeriodDate.AddDays(1);
 
-			if(!bIsGueltigAb && this.IsGueltigAb) dtPeriodenDatum = dtPeriodenDatum.AddDays(-1);
+			if(!bIsFrom && this.IsFrom) dtPeriodDate = dtPeriodDate.AddDays(-1);
 
-			return dtPeriodenDatum;
+			return dtPeriodDate;
 		}
 		#endregion
 	}

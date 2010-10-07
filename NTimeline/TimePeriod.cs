@@ -5,11 +5,10 @@ using System.Collections.ObjectModel;
 namespace NTimeline
 {
 	/// <summary>
-	/// Eine ZeitPeriode repräsentiert den Abschnitt zwischen zwei ZeitElementen.
-	/// Das zweite ZeitElement kann auch leer sein, was einer endlosen Periode gleichkommt.
-	/// Zusätzlich sind in der Zeitperiode alle während dieser Zeit gültigen Quellen gespeichert.
+	/// A time period represents a segment between to time elements on the timeline.
+	/// If there isn't a second time element, that means that the period is endless.
 	/// </summary>
-	public class TimePeriode
+	public class TimePeriod
 	{
 		#region Fields
 		private readonly TimeElement _timeElementFrom;
@@ -44,18 +43,18 @@ namespace NTimeline
 		#endregion
 
 		#region Constructors
-		public TimePeriode(TimeElement timeElementFrom)
+		public TimePeriod(TimeElement timeElementFrom)
 		{
 			if(timeElementFrom == null) throw new ArgumentNullException("timeElementFrom");
 			_timeElementFrom = timeElementFrom;
 		}
 
-		public TimePeriode(TimeElement timeElementFrom, TimeElement timeElementUntil) : this(timeElementFrom)
+		public TimePeriod(TimeElement timeElementFrom, TimeElement timeElementUntil) : this(timeElementFrom)
 		{
 			if(timeElementFrom == null) throw new ArgumentNullException("timeElementFrom");
 			if(timeElementUntil == null) throw new ArgumentNullException("timeElementUntil");
-			if(timeElementFrom == timeElementUntil && !(timeElementUntil.IsGueltigAb && timeElementUntil.IsGueltigBis))
-				throw new Exception("Eine Zeitperiode darf ein ZeitElement nur dann als Ab und Bis gesetzt haben, wenn das ZeitElement sowhol ein GültigAb, als auch ein GültigBis Datum ist.");
+			if(timeElementFrom == timeElementUntil && !(timeElementUntil.IsFrom && timeElementUntil.IsUntil))
+				throw new Exception("Invalid state.");
 
 			_timeElementUntil = timeElementUntil;
 		}
@@ -63,19 +62,18 @@ namespace NTimeline
 
 		#region Publics
 		/// <summary>
-		/// Liefert iene DateTimeCondition welche die Periode zwischen den zwei ZeitElementen darstellt.
+		/// Returns a Duration which represents the period between the two time elements.
 		/// </summary>
-		/// <returns>DateTimeCondition mit einem oder zwei Daten gesetzt.</returns>
+		/// <returns>Duration</returns>
 		public Duration GetPeriode()
 		{
-			if(this.From == this.Until && !(this.From.IsGueltigAb && this.From.IsGueltigBis))
-				throw new Exception("Eine Zeitperiode darf ein ZeitElement nur dann als Ab und Bis gesetzt haben, wenn das ZeitElement sowhol ein GültigAb, als auch ein GültigBis Datum ist.");
+			if(this.From == this.Until && !(this.From.IsFrom && this.From.IsUntil))
+				throw new Exception("Invalid state.");
 
-			//Falls das ab und das bis die gleichen Zeitelemente sind, braucht es eine spezielle Behandlung,
-			//Da es sich hier um eine eintägige Periode handelt
-			if(this.From == this.Until) return new Duration(this.From.Datum, this.Until.Datum);
+			// Special case: From and until date are the same
+			if(this.From == this.Until) return new Duration(this.From.Date, this.Until.Date);
 
-			DateTime dtGueltigAb = this.From.GetPeriodenDatum(true);
+			DateTime dtGueltigAb = this.From.GetPeriodDate(true);
 
 			Duration cnd;
 			if(this.Until == null)
@@ -84,7 +82,7 @@ namespace NTimeline
 			}
 			else
 			{
-				DateTime dtGueltigBis = this.Until.GetPeriodenDatum(false);
+				DateTime dtGueltigBis = this.Until.GetPeriodDate(false);
 				cnd = new Duration(dtGueltigAb, dtGueltigBis);
 			}
 
