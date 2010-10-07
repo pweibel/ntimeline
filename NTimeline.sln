@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTimeline", "NTimeline\NTimeline.csproj", "{BB1C3ADA-9B23-4434-880F-A2BADF553A18}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NTimeline.Test", "NTimeline.Test\NTimeline.Test.csproj", "{D1C70703-83EE-4E14-A497-5A063C2B1456}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BB1C3ADA-9B23-4434-880F-A2BADF553A18}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB1C3ADA-9B23-4434-880F-A2BADF553A18}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB1C3ADA-9B23-4434-880F-A2BADF553A18}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB1C3ADA-9B23-4434-880F-A2BADF553A18}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1C70703-83EE-4E14-A497-5A063C2B1456}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1C70703-83EE-4E14-A497-5A063C2B1456}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1C70703-83EE-4E14-A497-5A063C2B1456}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1C70703-83EE-4E14-A497-5A063C2B1456}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
