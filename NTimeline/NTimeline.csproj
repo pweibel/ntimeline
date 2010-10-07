@@ -49,7 +49,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TimeElement.cs" />
     <Compile Include="Timeline.cs" />
-    <Compile Include="TimePeriode.cs" />
+    <Compile Include="TimePeriod.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

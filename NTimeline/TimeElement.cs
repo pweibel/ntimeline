@@ -8,9 +8,7 @@ namespace NTimeline
 	public class TimeElement
 	{
 		#region Fields
-		private DateTime _dtDate;
-		private bool _bIsFrom;
-		private bool _bIsUntil;
+		private readonly DateTime _dtDate;
 		#endregion
 
 		#region Properties
@@ -19,25 +17,17 @@ namespace NTimeline
 			get { return _dtDate; }
 		}
 
-		public bool IsFrom
-		{
-			get { return _bIsFrom; }
-			set { _bIsFrom = value; }
-		}
+		public bool IsFrom { get; set; }
 
-		public bool IsUntil
-		{
-			get { return _bIsUntil; }
-			set { _bIsUntil = value; }
-		}
+		public bool IsUntil { get; set; }
 		#endregion
 
 		#region Constructors
 		public TimeElement(DateTime dtDate, bool bIsFrom)
 		{
 			_dtDate = dtDate;
-			_bIsFrom = bIsFrom;
-			_bIsUntil = !bIsFrom;
+			IsFrom = bIsFrom;
+			IsUntil = !bIsFrom;
 		}
 		#endregion
 

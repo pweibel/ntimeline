@@ -65,7 +65,7 @@ namespace NTimeline
 		/// Returns a Duration which represents the period between the two time elements.
 		/// </summary>
 		/// <returns>Duration</returns>
-		public Duration GetPeriode()
+		public Duration GetPeriod()
 		{
 			if(this.From == this.Until && !(this.From.IsFrom && this.From.IsUntil))
 				throw new Exception("Invalid state.");
@@ -73,20 +73,20 @@ namespace NTimeline
 			// Special case: From and until date are the same
 			if(this.From == this.Until) return new Duration(this.From.Date, this.Until.Date);
 
-			DateTime dtGueltigAb = this.From.GetPeriodDate(true);
+			DateTime dtFrom = this.From.GetPeriodDate(true);
 
-			Duration cnd;
+			Duration duration;
 			if(this.Until == null)
 			{
-				cnd = new Duration(dtGueltigAb);
+				duration = new Duration(dtFrom);
 			}
 			else
 			{
-				DateTime dtGueltigBis = this.Until.GetPeriodDate(false);
-				cnd = new Duration(dtGueltigAb, dtGueltigBis);
+				DateTime dtUntil = this.Until.GetPeriodDate(false);
+				duration = new Duration(dtFrom, dtUntil);
 			}
 
-			return cnd;
+			return duration;
 		}
 		#endregion
 	}

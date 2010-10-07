@@ -72,13 +72,13 @@ namespace NTimeline
 			this.TimeElements.Clear();
 
 			// Add all time elements of every time source
-			foreach(ITimeSource zeitQuelle in this.TimeSources)
+			foreach(ITimeSource timeSource in this.TimeSources)
 			{
-				IList<TimeElement> listTimeElement = zeitQuelle.CreateTimeElements();
+				IList<TimeElement> listTimeElement = timeSource.CreateTimeElements();
 				if(listTimeElement == null) continue;
 				foreach(TimeElement timeElement in listTimeElement)
 				{
-					AddOrCompleteZeitElement(timeElement);
+					AddOrCompleteTimeElement(timeElement);
 				}
 			}
 		}
@@ -103,16 +103,16 @@ namespace NTimeline
 					if(timePeriodOneDay != null && !listTimePeriod.Contains(timePeriodOneDay)) listTimePeriod.Add(timePeriodOneDay);
 				}
 
-				TimeElement timeElement1 = this.TimeElements.Values[i];
+				TimeElement timeElementFrom = this.TimeElements.Values[i];
 
 				// The second element will only be set, if there exists another one.
-				TimeElement timeElement2 = i < this.TimeElements.Count -1 ? this.TimeElements.Values[i+1] : null;
+				TimeElement timeElementUntil = i < this.TimeElements.Count -1 ? this.TimeElements.Values[i+1] : null;
 
 				// if the second time element follows directly after the first time element, there is nothing to do.
-				if(timeElement2 != null && timeElement1.Date.AddDays(1) == timeElement2.Date && timeElement1.IsUntil && timeElement2.IsFrom) continue;
+				if(timeElementUntil != null && timeElementFrom.Date.AddDays(1) == timeElementUntil.Date && timeElementFrom.IsUntil && timeElementUntil.IsFrom) continue;
 
 				// Create time period
-				TimePeriod timePeriod = CreateTimePeriod(timeElement1, timeElement2);
+				TimePeriod timePeriod = CreateTimePeriod(timeElementFrom, timeElementUntil);
 				if(timePeriod != null && !listTimePeriod.Contains(timePeriod)) listTimePeriod.Add(timePeriod);
 			}
 
@@ -132,7 +132,7 @@ namespace NTimeline
 
 			foreach(TimePeriod timePeriod in listTimePeriod)
 			{
-				Duration duration = timePeriod.GetPeriode();
+				Duration duration = timePeriod.GetPeriod();
 				if((!duration.IsDuration) || (duration.IsDuration && duration.Until >= dtDate.AddDays(-1)))
 				{
 					listValidTimePeriod.Add(timePeriod);
@@ -148,7 +148,7 @@ namespace NTimeline
 		/// Add a time element to the timeline.
 		/// </summary>
 		/// <param name="timeElementNew">New time element.</param>
-		private void AddOrCompleteZeitElement(TimeElement timeElementNew)
+		private void AddOrCompleteTimeElement(TimeElement timeElementNew)
 		{
 			if(timeElementNew == null) throw new ArgumentNullException("timeElementNew");
 
@@ -202,7 +202,7 @@ namespace NTimeline
 
 			TimePeriod timePeriod = timeElementUntil == null ? new TimePeriod(timeElementFrom) : new TimePeriod(timeElementFrom, timeElementUntil);
 
-			timePeriod.TimeSources = DetermineTimeSources(timePeriod.GetPeriode());
+			timePeriod.TimeSources = DetermineTimeSources(timePeriod.GetPeriod());
 
 			if(timePeriod.TimeSourcesView.Count == 0) return null;
 
