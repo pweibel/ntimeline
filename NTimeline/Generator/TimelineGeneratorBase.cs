@@ -1,6 +1,9 @@
 ﻿using System;
 
-namespace NTimeline.Base
+using NTimeline.Context;
+using NTimeline.Core;
+
+namespace NTimeline.Generator
 {
 	public abstract class TimelineGeneratorBase : ITimelineGenerator
 	{

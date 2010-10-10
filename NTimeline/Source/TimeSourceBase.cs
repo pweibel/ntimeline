@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NTimeline.Base
+using NTimeline.Core;
+using NTimeline.Helpers;
+
+namespace NTimeline.Source
 {
 	public abstract class TimeSourceBase : ITimeSource
 	{

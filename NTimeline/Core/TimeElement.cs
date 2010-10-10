@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NTimeline
+namespace NTimeline.Core
 {
 	/// <summary>
 	/// A time element is a date on a timeline.

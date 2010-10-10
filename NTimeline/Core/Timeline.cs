@@ -1,7 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace NTimeline
+using NTimeline.Generator;
+using NTimeline.Helpers;
+using NTimeline.Source;
+
+namespace NTimeline.Core
 {
 	public class Timeline
 	{

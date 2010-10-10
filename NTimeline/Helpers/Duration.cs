@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NTimeline
+namespace NTimeline.Helpers
 {
 	public class Duration
 	{

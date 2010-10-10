@@ -1,6 +1,9 @@
 ﻿using System.Collections.Generic;
 
-namespace NTimeline
+using NTimeline.Core;
+using NTimeline.Helpers;
+
+namespace NTimeline.Source
 {
 	/// <summary>
 	/// A time source provides data for the timeline.
