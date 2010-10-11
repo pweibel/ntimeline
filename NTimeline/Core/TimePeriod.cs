@@ -76,7 +76,7 @@ namespace NTimeline.Core
 			// Special case: From and until date are the same
 			if(this.From == this.Until) return new Duration(this.From.Date, this.Until.Date);
 
-			DateTime dtFrom = this.From.GetPeriodDate(true);
+			DateTime dtFrom = this.From.FromPeriodDate;
 
 			Duration duration;
 			if(this.Until == null)
@@ -85,7 +85,7 @@ namespace NTimeline.Core
 			}
 			else
 			{
-				DateTime dtUntil = this.Until.GetPeriodDate(false);
+				DateTime dtUntil = this.Until.UntilPeriodDate;
 				duration = new Duration(dtFrom, dtUntil);
 			}
 
