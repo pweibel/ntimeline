@@ -40,16 +40,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Base\TimelineGeneratorBase.cs" />
-    <Compile Include="Base\TimeSourceBase.cs" />
-    <Compile Include="Duration.cs" />
-    <Compile Include="ITimeContext.cs" />
-    <Compile Include="ITimelineGenerator.cs" />
-    <Compile Include="ITimeSource.cs" />
+    <Compile Include="Context\ITimeContext.cs" />
+    <Compile Include="Core\TimeElement.cs" />
+    <Compile Include="Core\Timeline.cs" />
+    <Compile Include="Core\TimePeriod.cs" />
+    <Compile Include="Generator\ITimelineGenerator.cs" />
+    <Compile Include="Generator\TimelineGeneratorBase.cs" />
+    <Compile Include="Helpers\Duration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TimeElement.cs" />
-    <Compile Include="Timeline.cs" />
-    <Compile Include="TimePeriod.cs" />
+    <Compile Include="Source\ITimeSource.cs" />
+    <Compile Include="Source\TimeSourceBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
