@@ -43,6 +43,37 @@ namespace NTimeline.Core
 				_listTimeSources = value;
 			}
 		}
+
+		/// <summary>
+		/// Returns a Duration which represents the period between the two time elements.
+		/// </summary>
+		/// <returns>Duration</returns>
+		public Duration Duration
+		{
+			get
+			{
+				if(this.From == this.Until && !(this.From.IsFrom && this.From.IsUntil))
+					throw new Exception("Invalid state.");
+
+				// Special case: From and until date are the same
+				if(this.From == this.Until) return new Duration(this.From.Date, this.Until.Date);
+
+				DateTime dtFrom = this.From.FromPeriodDate;
+
+				Duration duration;
+				if(this.Until == null)
+				{
+					duration = new Duration(dtFrom);
+				}
+				else
+				{
+					DateTime dtUntil = this.Until.UntilPeriodDate;
+					duration = new Duration(dtFrom, dtUntil);
+				}
+
+				return duration;
+			}
+		}
 		#endregion
 
 		#region Constructors
@@ -60,36 +91,6 @@ namespace NTimeline.Core
 				throw new Exception("Invalid state.");
 
 			_timeElementUntil = timeElementUntil;
-		}
-		#endregion
-
-		#region Publics
-		/// <summary>
-		/// Returns a Duration which represents the period between the two time elements.
-		/// </summary>
-		/// <returns>Duration</returns>
-		public Duration GetPeriod()
-		{
-			if(this.From == this.Until && !(this.From.IsFrom && this.From.IsUntil))
-				throw new Exception("Invalid state.");
-
-			// Special case: From and until date are the same
-			if(this.From == this.Until) return new Duration(this.From.Date, this.Until.Date);
-
-			DateTime dtFrom = this.From.FromPeriodDate;
-
-			Duration duration;
-			if(this.Until == null)
-			{
-				duration = new Duration(dtFrom);
-			}
-			else
-			{
-				DateTime dtUntil = this.Until.UntilPeriodDate;
-				duration = new Duration(dtFrom, dtUntil);
-			}
-
-			return duration;
 		}
 		#endregion
 	}

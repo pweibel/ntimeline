@@ -136,7 +136,7 @@ namespace NTimeline.Core
 
 			foreach(TimePeriod timePeriod in listTimePeriod)
 			{
-				Duration duration = timePeriod.GetPeriod();
+				Duration duration = timePeriod.Duration;
 				if((!duration.IsDuration) || (duration.IsDuration && duration.Until >= dtDate.AddDays(-1)))
 				{
 					listValidTimePeriod.Add(timePeriod);
@@ -206,7 +206,7 @@ namespace NTimeline.Core
 
 			TimePeriod timePeriod = timeElementUntil == null ? new TimePeriod(timeElementFrom) : new TimePeriod(timeElementFrom, timeElementUntil);
 
-			timePeriod.TimeSources = DetermineTimeSources(timePeriod.GetPeriod());
+			timePeriod.TimeSources = DetermineTimeSources(timePeriod.Duration);
 
 			if(timePeriod.TimeSourcesView.Count == 0) return null;
 
