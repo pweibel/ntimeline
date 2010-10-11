@@ -22,7 +22,7 @@ namespace NTimeline.Generator
 		#endregion
 
 		#region Publics
-		public void Generate(ITimeContext context)
+		public virtual void Generate(ITimeContext context)
 		{
 			if(context == null) throw new ArgumentNullException("context");
 

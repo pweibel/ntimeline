@@ -21,6 +21,8 @@ namespace NTimeline.Helpers
 
 		public Duration(DateTime dtFrom, DateTime? dtUntil)
 		{
+			if(dtUntil != null && dtUntil < dtFrom) throw new ArgumentException(string.Format("Until date '{0}' is smaller than from date '{1}'.", dtUntil, dtFrom));
+
 			this.From = dtFrom;
 			this.Until = dtUntil;
 		}

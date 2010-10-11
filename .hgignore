@@ -5,3 +5,5 @@ relre:NTimeline/bin/*
 relre:NTimeline.Test/bin/*
 relre:NTimeline.Test/obj/*
 relre:NTimeline/obj/*
+relre:packages/*
+relre:NTimeline/NTimeline.*.user
