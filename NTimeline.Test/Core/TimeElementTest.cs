@@ -23,5 +23,10 @@ namespace NTimeline.Test.Core
 			Assert.IsTrue(element.IsFrom);
 			Assert.IsFalse(element.IsUntil);
 		}
+
+		private void test()
+		{
+			Console.WriteLine("test");
+		}
 	}
 }
