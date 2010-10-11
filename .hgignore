@@ -1,4 +1,7 @@
-.hg
 _ReSharper.NTimeline
 NTimeline.5.1.ReSharper.user
 NTimeline.suo
+relre:NTimeline/bin/*
+relre:NTimeline.Test/bin/*
+relre:NTimeline.Test/obj/*
+relre:NTimeline/obj/*
