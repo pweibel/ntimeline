@@ -52,23 +52,19 @@ namespace NTimeline.Core
 		{
 			get
 			{
-				if(this.From == this.Until && !(this.From.IsFrom && this.From.IsUntil))
-					throw new Exception("Invalid state.");
+				if(this.From == this.Until && !(this.From.IsFrom && this.From.IsUntil)) throw new Exception("Invalid state.");
 
 				// Special case: From and until date are the same
 				if(this.From == this.Until) return new Duration(this.From.Date, this.Until.Date);
 
-				DateTime dtFrom = this.From.FromPeriodDate;
-
 				Duration duration;
 				if(this.Until == null)
 				{
-					duration = new Duration(dtFrom);
+					duration = new Duration(this.From.FromPeriodDate);
 				}
 				else
 				{
-					DateTime dtUntil = this.Until.UntilPeriodDate;
-					duration = new Duration(dtFrom, dtUntil);
+					duration = new Duration(this.From.FromPeriodDate, this.Until.UntilPeriodDate);
 				}
 
 				return duration;

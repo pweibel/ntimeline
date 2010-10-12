@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+
+using Moq;
 
 using NTimeline.Core;
+using NTimeline.Helpers;
+using NTimeline.Source;
 
 using NUnit.Framework;
 
@@ -112,6 +117,60 @@ namespace NTimeline.Test.Core
 
 			// Act
 			new TimePeriod(elementFrom, elementFrom);
+		}
+
+		[Test]
+		public void TestTimeSources()
+		{
+			// Arrange
+			var timeSourceMock1 = new Mock<ITimeSource>();
+			var timeSourceMock2 = new Mock<ITimeSource>();
+			IList<ITimeSource> listTimeSource = new List<ITimeSource> { timeSourceMock1.Object, timeSourceMock2.Object }; 
+			TimePeriod period = new TimePeriod(new TimeElement(DateTime.Now, true));
+
+			// Act
+			period.TimeSources = listTimeSource;
+
+			// Assert
+			Assert.IsNotNull(period.TimeSourcesView);
+			Assert.AreEqual(2, period.TimeSourcesView.Count);
+		}
+
+		[Test]
+		public void TestDuration()
+		{
+			// Arrange
+			DateTime dtFrom = DateTime.Now;
+			TimeElement elementFrom = new TimeElement(dtFrom, true);
+			DateTime dtUntil = dtFrom.AddMonths(1);
+			TimeElement elementUntil = new TimeElement(dtUntil, false);
+			TimePeriod timePeriod = new TimePeriod(elementFrom, elementUntil);
+
+			// Act
+			Duration duration = timePeriod.Duration;
+
+			// Assert
+			Assert.IsNotNull(duration);
+			Assert.IsTrue(duration.IsDuration);
+			Assert.AreEqual(dtFrom, duration.From);
+			Assert.AreEqual(dtUntil, duration.Until);
+		}
+
+		[Test]
+		public void TestDuration_With_Only_From()
+		{
+			// Arrange
+			DateTime dtFrom = DateTime.Now;
+			TimeElement elementFrom = new TimeElement(dtFrom, true);
+			TimePeriod timePeriod = new TimePeriod(elementFrom);
+
+			// Act
+			Duration duration = timePeriod.Duration;
+
+			// Assert
+			Assert.IsNotNull(duration);
+			Assert.IsFalse(duration.IsDuration);
+			Assert.AreEqual(dtFrom, duration.From);
 		}
 	}
 }
