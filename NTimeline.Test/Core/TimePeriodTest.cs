@@ -157,6 +157,38 @@ namespace NTimeline.Test.Core
 		}
 
 		[Test]
+		public void TestDuration_With_Identical_From_And_Until()
+		{
+			// Arrange
+			DateTime dtFrom = DateTime.Now;
+			TimeElement elementFrom = new TimeElement(dtFrom, true);
+			elementFrom.IsUntil = true;
+			TimePeriod timePeriod = new TimePeriod(elementFrom, elementFrom);
+
+			// Act
+			Duration duration = timePeriod.Duration;
+
+			// Assert
+			Assert.IsNotNull(duration);
+			Assert.IsTrue(duration.IsDuration);
+			Assert.AreEqual(dtFrom, duration.From);
+			Assert.AreEqual(dtFrom, duration.Until);
+		}
+
+		[Test]
+		[ExpectedException(typeof(Exception))]
+		public void TestDuration_With_Invalid_State()
+		{
+			// Arrange
+			DateTime dtFrom = DateTime.Now;
+			TimeElement elementFrom = new TimeElement(dtFrom, true);
+			TimePeriod timePeriod = new TimePeriod(elementFrom, elementFrom);
+
+			// Act
+			Duration duration = timePeriod.Duration;
+		}
+
+		[Test]
 		public void TestDuration_With_Only_From()
 		{
 			// Arrange
