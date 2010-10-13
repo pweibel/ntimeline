@@ -1,6 +1,6 @@
-﻿using EWeibel.NTimeline.Context;
+﻿using NTimeline.Context;
 
-namespace EWeibel.NTimeline.Generator
+namespace NTimeline.Generator
 {
 	public interface ITimelineGenerator
 	{

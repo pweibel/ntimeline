@@ -1,13 +1,13 @@
 ﻿using System;
 
-using EWeibel.NTimeline.Core;
-using EWeibel.NTimeline.Generator;
+using NTimeline.Core;
+using NTimeline.Generator;
 
 using Moq;
 
 using NUnit.Framework;
 
-namespace EWeibel.NTimeline.Test.Core
+namespace NTimeline.Test.Core
 {
 	[TestFixture]
 	public class TimelineTest

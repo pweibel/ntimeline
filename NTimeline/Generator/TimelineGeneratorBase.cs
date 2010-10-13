@@ -1,9 +1,9 @@
 ﻿using System;
 
-using EWeibel.NTimeline.Context;
-using EWeibel.NTimeline.Core;
+using NTimeline.Context;
+using NTimeline.Core;
 
-namespace EWeibel.NTimeline.Generator
+namespace NTimeline.Generator
 {
 	public abstract class TimelineGeneratorBase : ITimelineGenerator
 	{

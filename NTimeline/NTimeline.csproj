@@ -8,7 +8,7 @@
     <ProjectGuid>{BB1C3ADA-9B23-4434-880F-A2BADF553A18}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>EWeibel.NTimeline</RootNamespace>
+    <RootNamespace>NTimeline</RootNamespace>
     <AssemblyName>NTimeline</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

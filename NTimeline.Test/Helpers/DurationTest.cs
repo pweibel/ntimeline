@@ -1,10 +1,10 @@
 ﻿using System;
 
-using EWeibel.NTimeline.Helpers;
+using NTimeline.Helpers;
 
 using NUnit.Framework;
 
-namespace EWeibel.NTimeline.Test.Helpers
+namespace NTimeline.Test.Helpers
 {
 	[TestFixture]
 	public class DurationTest
