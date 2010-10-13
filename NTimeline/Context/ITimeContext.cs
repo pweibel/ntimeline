@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NTimeline.Context
+namespace EWeibel.NTimeline.Context
 {
 	public interface ITimeContext
 	{

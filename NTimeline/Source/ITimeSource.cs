@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 
-using NTimeline.Core;
-using NTimeline.Helpers;
+using EWeibel.NTimeline.Core;
+using EWeibel.NTimeline.Helpers;
 
-namespace NTimeline.Source
+namespace EWeibel.NTimeline.Source
 {
 	/// <summary>
 	/// A time source provides data for the timeline.

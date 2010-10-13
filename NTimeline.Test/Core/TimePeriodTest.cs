@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using Moq;
+using EWeibel.NTimeline.Core;
+using EWeibel.NTimeline.Helpers;
+using EWeibel.NTimeline.Source;
 
-using NTimeline.Core;
-using NTimeline.Helpers;
-using NTimeline.Source;
+using Moq;
 
 using NUnit.Framework;
 
-namespace NTimeline.Test.Core
+namespace EWeibel.NTimeline.Test.Core
 {
 	[TestFixture]
 	public class TimePeriodTest

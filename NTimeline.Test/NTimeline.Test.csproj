@@ -9,7 +9,7 @@
     <ProjectGuid>{D1C70703-83EE-4E14-A497-5A063C2B1456}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>NTimeline.Test</RootNamespace>
+    <RootNamespace>EWeibel.NTimeline.Test</RootNamespace>
     <AssemblyName>NTimeline.Test</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

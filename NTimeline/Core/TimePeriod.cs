@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 
-using NTimeline.Helpers;
-using NTimeline.Source;
+using EWeibel.NTimeline.Helpers;
+using EWeibel.NTimeline.Source;
 
-namespace NTimeline.Core
+namespace EWeibel.NTimeline.Core
 {
 	/// <summary>
 	/// A time period represents a segment between to time elements on the timeline.

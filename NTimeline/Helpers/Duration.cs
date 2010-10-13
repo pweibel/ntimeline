@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NTimeline.Helpers
+namespace EWeibel.NTimeline.Helpers
 {
 	public class Duration
 	{

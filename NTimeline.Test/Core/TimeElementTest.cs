@@ -1,10 +1,10 @@
 ﻿using System;
 
-using NTimeline.Core;
+using EWeibel.NTimeline.Core;
 
 using NUnit.Framework;
 
-namespace NTimeline.Test.Core
+namespace EWeibel.NTimeline.Test.Core
 {
 	[TestFixture]
 	public class TimeElementTest

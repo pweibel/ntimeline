@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using NTimeline.Generator;
-using NTimeline.Helpers;
-using NTimeline.Source;
+using EWeibel.NTimeline.Generator;
+using EWeibel.NTimeline.Helpers;
+using EWeibel.NTimeline.Source;
 
-namespace NTimeline.Core
+namespace EWeibel.NTimeline.Core
 {
 	public class Timeline
 	{

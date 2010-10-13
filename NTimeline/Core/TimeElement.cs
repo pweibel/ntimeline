@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace NTimeline.Core
+namespace EWeibel.NTimeline.Core
 {
 	/// <summary>
 	/// A time element is a date on a timeline.
