@@ -124,7 +124,7 @@ namespace NTimeline.Core
 		}
 
 		/// <summary>
-		/// Returns a list with time periods which are valid during the date or after the date
+		/// Returns a list with time periods which are valid during the date
 		/// </summary>
 		/// <param name="dtDate">Date</param>
 		/// <returns></returns>
@@ -137,7 +137,7 @@ namespace NTimeline.Core
 			foreach(TimePeriod timePeriod in listTimePeriod)
 			{
 				Duration duration = timePeriod.Duration;
-				if((!duration.IsDuration) || (duration.IsDuration && duration.Until >= dtDate.AddDays(-1)))
+				if(duration.From <= dtDate && (duration.Until == null || dtDate <= duration.Until))
 				{
 					listValidTimePeriod.Add(timePeriod);
 				}
