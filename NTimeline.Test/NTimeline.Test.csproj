@@ -59,6 +59,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Core\TimeElementTest.cs" />
+    <Compile Include="Core\TimelineTest.cs" />
     <Compile Include="Core\TimePeriodTest.cs" />
     <Compile Include="Helpers\DurationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
