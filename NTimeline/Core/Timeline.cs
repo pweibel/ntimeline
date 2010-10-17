@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 using NTimeline.Generator;
 using NTimeline.Helpers;
@@ -130,20 +131,10 @@ namespace NTimeline.Core
 		/// <returns></returns>
 		public IList<TimePeriod> BuildTimePeriods(DateTime dtDate)
 		{
-			IList<TimePeriod> listTimePeriod = BuildTimePeriods();
-
-			IList<TimePeriod> listValidTimePeriod = new List<TimePeriod>();
-
-			foreach(TimePeriod timePeriod in listTimePeriod)
-			{
-				Duration duration = timePeriod.Duration;
-				if(duration.From <= dtDate && (duration.Until == null || dtDate <= duration.Until))
-				{
-					listValidTimePeriod.Add(timePeriod);
-				}
-			}
-
-			return listValidTimePeriod;
+			return (from timePeriod in BuildTimePeriods()
+			        let duration = timePeriod.Duration
+			        where duration.From <= dtDate && (duration.Until == null || dtDate <= duration.Until)
+			        select timePeriod).ToList();
 		}
 		#endregion
 

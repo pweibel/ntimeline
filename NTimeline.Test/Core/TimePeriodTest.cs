@@ -185,7 +185,10 @@ namespace NTimeline.Test.Core
 			TimePeriod timePeriod = new TimePeriod(elementFrom, elementFrom);
 
 			// Act
-			Duration duration = timePeriod.Duration;
+			var duration = timePeriod.Duration;
+
+			// Assert
+			Assert.Fail("Duration should throw an exception and the return value here should be null.", duration);
 		}
 
 		[Test]

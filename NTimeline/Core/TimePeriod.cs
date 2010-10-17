@@ -57,17 +57,7 @@ namespace NTimeline.Core
 				// Special case: From and until date are the same
 				if(this.From == this.Until) return new Duration(this.From.Date, this.Until.Date);
 
-				Duration duration;
-				if(this.Until == null)
-				{
-					duration = new Duration(this.From.FromPeriodDate);
-				}
-				else
-				{
-					duration = new Duration(this.From.FromPeriodDate, this.Until.UntilPeriodDate);
-				}
-
-				return duration;
+				return this.Until == null ? new Duration(this.From.FromPeriodDate) : new Duration(this.From.FromPeriodDate, this.Until.UntilPeriodDate);
 			}
 		}
 		#endregion
