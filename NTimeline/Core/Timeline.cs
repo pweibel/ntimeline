@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 
+using NTimeline.Context;
 using NTimeline.Helpers;
 using NTimeline.Source;
 using NTimeline.Visitor;
@@ -16,6 +17,8 @@ namespace NTimeline.Core
 		#endregion
 
 		#region Properties
+		public IContext Context { get; private set; }
+
 		private IList<ITimeSource> TimeSources
 		{
 			get { return this.listTimeSources; }
@@ -27,6 +30,13 @@ namespace NTimeline.Core
 		}
 		#endregion
 
+		#region Constructors
+		public Timeline(IContext context)
+		{
+			this.Context = context;
+		}
+		#endregion
+		
 		#region Publics
 		/// <summary>
 		/// Adds a time source.
@@ -209,7 +219,7 @@ namespace NTimeline.Core
 		{
 			if(timeElementFrom == null) throw new ArgumentNullException("timeElementFrom");
 
-			TimePeriod timePeriod = timeElementUntil == null ? new TimePeriod(timeElementFrom) : new TimePeriod(timeElementFrom, timeElementUntil);
+			TimePeriod timePeriod = timeElementUntil == null ? new TimePeriod(this, timeElementFrom) : new TimePeriod(this, timeElementFrom, timeElementUntil);
 
 			timePeriod.TimeSources = DetermineTimeSources(timePeriod.Duration);
 

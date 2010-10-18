@@ -14,6 +14,7 @@ namespace NTimeline.Core
 	public class TimePeriod
 	{
 		#region Fields
+		private readonly Timeline timeline;
 		private readonly TimeElement timeElementFrom;
 		private readonly TimeElement timeElementUntil;
 		private IList<ITimeSource> listTimeSources = new List<ITimeSource>();
@@ -21,14 +22,19 @@ namespace NTimeline.Core
 		#endregion
 
 		#region Properties
+		public Timeline Timeline
+		{
+			get { return timeline; }
+		}
+		
 		public TimeElement From
 		{
-			get { return this.timeElementFrom; }
+			get { return timeElementFrom; }
 		}
 
 		public TimeElement Until
 		{
-			get { return this.timeElementUntil; }
+			get { return timeElementUntil; }
 		}
 
 		public ReadOnlyCollection<ITimeSource> TimeSourcesView
@@ -63,18 +69,21 @@ namespace NTimeline.Core
 		#endregion
 
 		#region Constructors
-		public TimePeriod(TimeElement timeElementFrom)
+		public TimePeriod(Timeline timeline, TimeElement timeElementFrom)
 		{
+			if(timeline == null) throw new ArgumentNullException("timeline");
 			if(timeElementFrom == null) throw new ArgumentNullException("timeElementFrom");
+
+			this.timeline = timeline;
 			this.timeElementFrom = timeElementFrom;
 		}
 
-		public TimePeriod(TimeElement timeElementFrom, TimeElement timeElementUntil) : this(timeElementFrom)
+		public TimePeriod(Timeline timeline, TimeElement timeElementFrom, TimeElement timeElementUntil) : this(timeline, timeElementFrom)
 		{
+			if(timeline == null) throw new ArgumentNullException("timeline");
 			if(timeElementFrom == null) throw new ArgumentNullException("timeElementFrom");
 			if(timeElementUntil == null) throw new ArgumentNullException("timeElementUntil");
-			if(timeElementFrom == timeElementUntil && !(timeElementUntil.IsFrom && timeElementUntil.IsUntil))
-				throw new Exception("Invalid state.");
+			if(timeElementFrom == timeElementUntil && !(timeElementUntil.IsFrom && timeElementUntil.IsUntil)) throw new Exception("Invalid state.");
 
 			this.timeElementUntil = timeElementUntil;
 		}
