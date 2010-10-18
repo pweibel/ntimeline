@@ -40,11 +40,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Generator\TimelineGeneratorBase.cs" />
+    <Compile Include="Visitor\ITimelineVisitor.cs" />
     <Compile Include="Source\TimeSourceBase.cs" />
     <Compile Include="Helpers\Duration.cs" />
-    <Compile Include="Context\ITimeContext.cs" />
-    <Compile Include="Generator\ITimelineGenerator.cs" />
+    <Compile Include="Context\IContext.cs" />
     <Compile Include="Source\ITimeSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Core\TimeElement.cs" />

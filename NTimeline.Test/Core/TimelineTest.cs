@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Moq;
 using NTimeline.Core;
-using NTimeline.Generator;
 using NTimeline.Helpers;
 using NTimeline.Source;
 using NUnit.Framework;
@@ -13,33 +12,11 @@ namespace NTimeline.Test.Core
 	public class TimelineTest
 	{
 		[Test]
-		public void TestTimeline()
-		{
-			// Arrange
-			var generator = new Mock<ITimelineGenerator>();
-
-			// Act
-			Timeline timeline = new Timeline(generator.Object);
-
-			// Assert
-			Assert.AreEqual(generator.Object, timeline.TimelineGenerator);
-		}
-
-		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void TestTimeline_With_Null_As_Parameter()
-		{
-			// Act
-			new Timeline(null);
-		}
-
-		[Test]
 		public void TestAddTimeSource()
 		{
 			// Arrange
 			var source = new Mock<ITimeSource>();
-			var generator = new Mock<ITimelineGenerator>();
-			Timeline timeline = new Timeline(generator.Object);
+			Timeline timeline = new Timeline();
 
 			// Act
 			timeline.AddTimeSource(source.Object);
@@ -53,8 +30,7 @@ namespace NTimeline.Test.Core
 		public void TestAddTimeSource_With_Null()
 		{
 			// Arrange
-			var generator = new Mock<ITimelineGenerator>();
-			Timeline timeline = new Timeline(generator.Object);
+			Timeline timeline = new Timeline();
 
 			// Act
 			timeline.AddTimeSource(null);
@@ -64,8 +40,7 @@ namespace NTimeline.Test.Core
 		public void TestRemoveTimeSource()
 		{
 			// Arrange
-			var generator = new Mock<ITimelineGenerator>();
-			Timeline timeline = new Timeline(generator.Object);
+			Timeline timeline = new Timeline();
 			var source = new Mock<ITimeSource>();
 			timeline.AddTimeSource(source.Object);
 
@@ -81,8 +56,7 @@ namespace NTimeline.Test.Core
 		public void TestRemoveTimeSource_With_Null()
 		{
 			// Arrange
-			var generator = new Mock<ITimelineGenerator>();
-			Timeline timeline = new Timeline(generator.Object);
+			Timeline timeline = new Timeline();
 
 			// Act
 			timeline.RemoveTimeSource(null);
@@ -92,8 +66,7 @@ namespace NTimeline.Test.Core
 		public void TestGenerate()
 		{
 			// Arrange
-			var generator = new Mock<ITimelineGenerator>();
-			Timeline timeline = new Timeline(generator.Object);
+			Timeline timeline = new Timeline();
 			DateTime dtFrom = new DateTime(2010, 1, 1);
 			var source = new Mock<ITimeSource>();
 			source.Setup(x => x.CreateTimeElements()).Returns(new List<TimeElement> { new TimeElement(dtFrom, true) });
@@ -112,8 +85,7 @@ namespace NTimeline.Test.Core
 		public void TestBuildTimePeriods()
 		{
 			// Arrange
-			var generator = new Mock<ITimelineGenerator>();
-			Timeline timeline = new Timeline(generator.Object);
+			Timeline timeline = new Timeline();
 			DateTime dtFrom = new DateTime(2010, 1, 1);
 			var source = new Mock<ITimeSource>();
 			source.Setup(x => x.CreateTimeElements()).Returns(new List<TimeElement> { new TimeElement(dtFrom, true) });
@@ -134,8 +106,7 @@ namespace NTimeline.Test.Core
 		public void TestBuildTimePeriods_With_Date_In_Period()
 		{
 			// Arrange
-			var generator = new Mock<ITimelineGenerator>();
-			Timeline timeline = new Timeline(generator.Object);
+			Timeline timeline = new Timeline();
 			DateTime dtFrom = new DateTime(2010, 1, 1);
 			var source = new Mock<ITimeSource>();
 			source.Setup(x => x.CreateTimeElements()).Returns(new List<TimeElement> { new TimeElement(dtFrom, true) });
@@ -156,8 +127,7 @@ namespace NTimeline.Test.Core
 		public void TestBuildTimePeriods_With_Date_Before_Period()
 		{
 			// Arrange
-			var generator = new Mock<ITimelineGenerator>();
-			Timeline timeline = new Timeline(generator.Object);
+			Timeline timeline = new Timeline();
 			DateTime dtFrom = new DateTime(2010, 1, 1);
 			var source = new Mock<ITimeSource>();
 			source.Setup(x => x.CreateTimeElements()).Returns(new List<TimeElement> { new TimeElement(dtFrom, true) });

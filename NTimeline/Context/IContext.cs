@@ -2,7 +2,7 @@
 
 namespace NTimeline.Context
 {
-	public interface ITimeContext
+	public interface IContext
 	{
 		DateTime From { get; }
 	}

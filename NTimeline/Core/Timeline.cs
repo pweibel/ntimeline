@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using NTimeline.Generator;
 using NTimeline.Helpers;
 using NTimeline.Source;
+using NTimeline.Visitor;
 
 namespace NTimeline.Core
 {
@@ -16,12 +16,6 @@ namespace NTimeline.Core
 		#endregion
 
 		#region Properties
-		public ITimelineGenerator TimelineGenerator
-		{
-			get; 
-			private set;
-		}
-
 		private IList<ITimeSource> TimeSources
 		{
 			get { return this.listTimeSources; }
@@ -30,15 +24,6 @@ namespace NTimeline.Core
 		private SortedList<DateTime, TimeElement> TimeElements
 		{
 			get { return this.listTimeElements;  }
-		}
-		#endregion
-
-		#region Constructors
-		public Timeline(ITimelineGenerator timelineGenerator)
-		{
-			if(timelineGenerator == null) throw new ArgumentNullException("timelineGenerator");
-
-			this.TimelineGenerator = timelineGenerator;
 		}
 		#endregion
 
@@ -135,6 +120,35 @@ namespace NTimeline.Core
 			        let duration = timePeriod.Duration
 			        where duration.From <= dtDate && (duration.Until == null || dtDate <= duration.Until)
 			        select timePeriod).ToList();
+		}
+
+		/// <summary>
+		/// Loops through all time periods of the timeline in chronological order.
+		/// </summary>
+		/// <param name="timelineVisitor">Visitor</param>
+		public void Accept(ITimelineVisitor timelineVisitor)
+		{
+			if(timelineVisitor == null) throw new ArgumentNullException("timelineVisitor");
+
+			foreach(TimePeriod period in BuildTimePeriods())
+			{
+				timelineVisitor.Visit(period);
+			}
+		}
+
+		/// <summary>
+		/// Loops through all time periods of the timeline in chronological order starting at the given Date.
+		/// </summary>
+		/// <param name="timelineVisitor">Visitor</param>
+		/// <param name="dtDate">All valid and future periods will be visited</param>
+		public void Accept(ITimelineVisitor timelineVisitor, DateTime dtDate)
+		{
+			if(timelineVisitor == null) throw new ArgumentNullException("timelineVisitor");
+
+			foreach(TimePeriod period in BuildTimePeriods(dtDate))
+			{
+				timelineVisitor.Visit(period);
+			}
 		}
 		#endregion
 
