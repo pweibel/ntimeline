@@ -5,5 +5,7 @@ relre:NTimeline/bin/*
 relre:NTimeline.Test/bin/*
 relre:NTimeline.Test/obj/*
 relre:NTimeline/obj/*
+relre:NTimeline/StyleCop.Cache
+relre:NTimeline.Test/StyleCop.Cache
 relre:packages/*
 relre:NTimeline/NTimeline.*.user
