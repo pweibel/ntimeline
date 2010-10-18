@@ -11,8 +11,8 @@ namespace NTimeline.Core
 	public class Timeline
 	{
 		#region Fields
-		private readonly IList<ITimeSource> _listTimeSources = new List<ITimeSource>();
-		private readonly SortedList<DateTime, TimeElement> _listTimeElements = new SortedList<DateTime, TimeElement>();
+		private readonly IList<ITimeSource> listTimeSources = new List<ITimeSource>();
+		private readonly SortedList<DateTime, TimeElement> listTimeElements = new SortedList<DateTime, TimeElement>();
 		#endregion
 
 		#region Properties
@@ -24,12 +24,12 @@ namespace NTimeline.Core
 
 		private IList<ITimeSource> TimeSources
 		{
-			get { return _listTimeSources; }
+			get { return this.listTimeSources; }
 		}
 
 		private SortedList<DateTime, TimeElement> TimeElements
 		{
-			get { return _listTimeElements;  }
+			get { return this.listTimeElements;  }
 		}
 		#endregion
 
@@ -98,7 +98,7 @@ namespace NTimeline.Core
 
 			if(this.TimeElements.Values.Count == 0) return listTimePeriod;
 
-			for(int i=0; i < this.TimeElements.Values.Count; i++)
+			for(int i = 0; i < this.TimeElements.Values.Count; i++)
 			{
 				// If the current time element is a From and a Until date, then a one day period has to be created.
 				if(this.TimeElements.Values[i].IsFrom && this.TimeElements.Values[i].IsUntil)
@@ -111,7 +111,7 @@ namespace NTimeline.Core
 				TimeElement timeElementFrom = this.TimeElements.Values[i];
 
 				// The second element will only be set, if there exists another one.
-				TimeElement timeElementUntil = i < this.TimeElements.Count -1 ? this.TimeElements.Values[i+1] : null;
+				TimeElement timeElementUntil = i < this.TimeElements.Count - 1 ? this.TimeElements.Values[i + 1] : null;
 
 				// if the second time element follows directly after the first time element, there is nothing to do.
 				if(timeElementUntil != null && timeElementFrom.Date.AddDays(1) == timeElementUntil.Date && timeElementFrom.IsUntil && timeElementUntil.IsFrom) continue;
@@ -199,9 +199,7 @@ namespace NTimeline.Core
 
 			timePeriod.TimeSources = DetermineTimeSources(timePeriod.Duration);
 
-			if(timePeriod.TimeSourcesView.Count == 0) return null;
-
-			return timePeriod;
+			return timePeriod.TimeSourcesView.Count == 0 ? null : timePeriod;
 		}
 		#endregion
 	}

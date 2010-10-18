@@ -8,13 +8,13 @@ namespace NTimeline.Core
 	public class TimeElement
 	{
 		#region Fields
-		private readonly DateTime _dtDate;
+		private readonly DateTime dtDate;
 		#endregion
 
 		#region Properties
 		public DateTime Date
 		{
-			get { return _dtDate; }
+			get { return this.dtDate; }
 		}
 
 		public bool IsFrom { get; set; }
@@ -57,9 +57,9 @@ namespace NTimeline.Core
 		#region Constructors
 		public TimeElement(DateTime dtDate, bool bIsFrom)
 		{
-			_dtDate = dtDate;
-			IsFrom = bIsFrom;
-			IsUntil = !bIsFrom;
+			this.dtDate = dtDate;
+			this.IsFrom = bIsFrom;
+			this.IsUntil = !bIsFrom;
 		}
 		#endregion
 	}

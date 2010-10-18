@@ -1,14 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Moq;
 using NTimeline.Core;
 using NTimeline.Generator;
-
-using Moq;
-
 using NTimeline.Helpers;
 using NTimeline.Source;
-
 using NUnit.Framework;
 
 namespace NTimeline.Test.Core
@@ -98,7 +94,7 @@ namespace NTimeline.Test.Core
 			// Arrange
 			var generator = new Mock<ITimelineGenerator>();
 			Timeline timeline = new Timeline(generator.Object);
-			DateTime dtFrom = new DateTime(2010,1,1);
+			DateTime dtFrom = new DateTime(2010, 1, 1);
 			var source = new Mock<ITimeSource>();
 			source.Setup(x => x.CreateTimeElements()).Returns(new List<TimeElement> { new TimeElement(dtFrom, true) });
 			source.Setup(x => x.IsValid(It.IsAny<Duration>())).Returns(true);

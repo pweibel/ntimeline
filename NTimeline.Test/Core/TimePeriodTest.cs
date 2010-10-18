@@ -1,12 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using Moq;
 using NTimeline.Core;
 using NTimeline.Helpers;
 using NTimeline.Source;
-
-using Moq;
-
 using NUnit.Framework;
 
 namespace NTimeline.Test.Core

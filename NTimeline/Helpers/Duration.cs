@@ -6,7 +6,9 @@ namespace NTimeline.Helpers
 	{
 		#region Properties
 		public DateTime From { get; private set; }
+
 		public DateTime? Until { get; private set; }
+		
 		public bool IsDuration
 		{
 			get { return this.Until.HasValue; }

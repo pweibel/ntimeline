@@ -44,6 +44,7 @@ namespace NTimeline.Generator
 
 		#region Protecteds
 		protected abstract void RegisterTimeSources();
+
 		protected abstract void GenerateTimeElements();
 		#endregion
 	}
