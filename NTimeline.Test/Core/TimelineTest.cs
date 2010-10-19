@@ -16,7 +16,7 @@ namespace NTimeline.Test.Core
 		{
 			// Arrange
 			var source = new Mock<ITimeSource>();
-			Timeline timeline = new Timeline(null);
+			Timeline timeline = new Timeline();
 
 			// Act
 			timeline.AddTimeSource(source.Object);
@@ -30,7 +30,7 @@ namespace NTimeline.Test.Core
 		public void TestAddTimeSource_With_Null()
 		{
 			// Arrange
-			Timeline timeline = new Timeline(null);
+			Timeline timeline = new Timeline();
 
 			// Act
 			timeline.AddTimeSource(null);
@@ -40,7 +40,7 @@ namespace NTimeline.Test.Core
 		public void TestRemoveTimeSource()
 		{
 			// Arrange
-			Timeline timeline = new Timeline(null);
+			Timeline timeline = new Timeline();
 			var source = new Mock<ITimeSource>();
 			timeline.AddTimeSource(source.Object);
 
@@ -56,7 +56,7 @@ namespace NTimeline.Test.Core
 		public void TestRemoveTimeSource_With_Null()
 		{
 			// Arrange
-			Timeline timeline = new Timeline(null);
+			Timeline timeline = new Timeline();
 
 			// Act
 			timeline.RemoveTimeSource(null);
@@ -66,7 +66,7 @@ namespace NTimeline.Test.Core
 		public void TestGenerate()
 		{
 			// Arrange
-			Timeline timeline = new Timeline(null);
+			Timeline timeline = new Timeline();
 			DateTime dtFrom = new DateTime(2010, 1, 1);
 			var source = new Mock<ITimeSource>();
 			source.Setup(x => x.CreateTimeElements()).Returns(new List<TimeElement> { new TimeElement(dtFrom, true) });
@@ -85,7 +85,7 @@ namespace NTimeline.Test.Core
 		public void TestBuildTimePeriods()
 		{
 			// Arrange
-			Timeline timeline = new Timeline(null);
+			Timeline timeline = new Timeline();
 			DateTime dtFrom = new DateTime(2010, 1, 1);
 			var source = new Mock<ITimeSource>();
 			source.Setup(x => x.CreateTimeElements()).Returns(new List<TimeElement> { new TimeElement(dtFrom, true) });
@@ -106,7 +106,7 @@ namespace NTimeline.Test.Core
 		public void TestBuildTimePeriods_With_Date_In_Period()
 		{
 			// Arrange
-			Timeline timeline = new Timeline(null);
+			Timeline timeline = new Timeline();
 			DateTime dtFrom = new DateTime(2010, 1, 1);
 			var source = new Mock<ITimeSource>();
 			source.Setup(x => x.CreateTimeElements()).Returns(new List<TimeElement> { new TimeElement(dtFrom, true) });
@@ -127,7 +127,7 @@ namespace NTimeline.Test.Core
 		public void TestBuildTimePeriods_With_Date_Before_Period()
 		{
 			// Arrange
-			Timeline timeline = new Timeline(null);
+			Timeline timeline = new Timeline();
 			DateTime dtFrom = new DateTime(2010, 1, 1);
 			var source = new Mock<ITimeSource>();
 			source.Setup(x => x.CreateTimeElements()).Returns(new List<TimeElement> { new TimeElement(dtFrom, true) });

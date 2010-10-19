@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 
 using NTimeline.Helpers;
 using NTimeline.Source;
@@ -14,19 +13,12 @@ namespace NTimeline.Core
 	public class TimePeriod
 	{
 		#region Fields
-		private readonly Timeline timeline;
 		private readonly TimeElement timeElementFrom;
 		private readonly TimeElement timeElementUntil;
 		private IList<ITimeSource> listTimeSources = new List<ITimeSource>();
-		private ReadOnlyCollection<ITimeSource> listTimeSourcesView; 
 		#endregion
 
 		#region Properties
-		public Timeline Timeline
-		{
-			get { return timeline; }
-		}
-		
 		public TimeElement From
 		{
 			get { return timeElementFrom; }
@@ -37,17 +29,10 @@ namespace NTimeline.Core
 			get { return timeElementUntil; }
 		}
 
-		public ReadOnlyCollection<ITimeSource> TimeSourcesView
-		{
-			get { return this.listTimeSourcesView ?? (this.listTimeSourcesView = new ReadOnlyCollection<ITimeSource>(this.listTimeSources)); }
-		}
-
 		public IList<ITimeSource> TimeSources
 		{
-			set
-			{
-				this.listTimeSources = value;
-			}
+		    get { return this.listTimeSources; }
+		    set { this.listTimeSources = value; }
 		}
 
 		/// <summary>
@@ -63,24 +48,53 @@ namespace NTimeline.Core
 				// Special case: From and until date are the same
 				if(this.From == this.Until) return new Duration(this.From.Date, this.Until.Date);
 
-				return this.Until == null ? new Duration(this.From.FromPeriodDate) : new Duration(this.From.FromPeriodDate, this.Until.UntilPeriodDate);
+				return this.Until == null ? new Duration(this.FromPeriodDate) : new Duration(this.FromPeriodDate, this.UntilPeriodDate);
+			}
+		}
+
+		/// <summary>
+		/// Returns the relevant from date for the period.
+		/// </summary>
+		/// <returns>Correct from Date for the period</returns>
+		private DateTime FromPeriodDate
+		{
+			get
+			{
+				DateTime dtPeriodDate = this.From.Date;
+
+				if (this.From.IsUntil) dtPeriodDate = dtPeriodDate.AddDays(1);
+
+				return dtPeriodDate;
+			}
+		}
+
+		/// <summary>
+		/// Returns the relevant until date for the period.
+		/// </summary>
+		/// <returns>Correct until Date for the period</returns>
+		private DateTime UntilPeriodDate
+		{
+			get
+			{
+				DateTime dtPeriodDate = this.Until.Date;
+
+				if (this.Until.IsFrom) dtPeriodDate = dtPeriodDate.AddDays(-1);
+
+				return dtPeriodDate;
 			}
 		}
 		#endregion
 
 		#region Constructors
-		public TimePeriod(Timeline timeline, TimeElement timeElementFrom)
+		public TimePeriod(TimeElement timeElementFrom)
 		{
-			if(timeline == null) throw new ArgumentNullException("timeline");
 			if(timeElementFrom == null) throw new ArgumentNullException("timeElementFrom");
 
-			this.timeline = timeline;
 			this.timeElementFrom = timeElementFrom;
 		}
 
-		public TimePeriod(Timeline timeline, TimeElement timeElementFrom, TimeElement timeElementUntil) : this(timeline, timeElementFrom)
+		public TimePeriod(TimeElement timeElementFrom, TimeElement timeElementUntil) : this(timeElementFrom)
 		{
-			if(timeline == null) throw new ArgumentNullException("timeline");
 			if(timeElementFrom == null) throw new ArgumentNullException("timeElementFrom");
 			if(timeElementUntil == null) throw new ArgumentNullException("timeElementUntil");
 			if(timeElementFrom == timeElementUntil && !(timeElementUntil.IsFrom && timeElementUntil.IsUntil)) throw new Exception("Invalid state.");

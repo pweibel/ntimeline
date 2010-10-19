@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 
-using NTimeline.Context;
 using NTimeline.Helpers;
 using NTimeline.Source;
 using NTimeline.Visitor;
@@ -12,12 +11,17 @@ namespace NTimeline.Core
 	public class Timeline
 	{
 		#region Fields
-	    private readonly IList<ITimeSource> listTimeSources = new List<ITimeSource>();
+		private readonly IList<ITimeSource> listTimeSources = new List<ITimeSource>();
 		private readonly SortedList<DateTime, TimeElement> listTimeElements = new SortedList<DateTime, TimeElement>();
+		private ITimePeriodBuilder timePeriodBuilder = new DatePeriodBuilder();
 		#endregion
 
 		#region Properties
-		public IContext Context { get; private set; }
+		public ITimePeriodBuilder TimePeriodBuilder
+		{ 
+			get { return timePeriodBuilder; }
+			set { timePeriodBuilder = value; }
+		}
 
 		private IList<ITimeSource> TimeSources
 		{
@@ -30,13 +34,6 @@ namespace NTimeline.Core
 		}
 		#endregion
 
-		#region Constructors
-		public Timeline(IContext context)
-		{
-			this.Context = context;
-		}
-		#endregion
-		
 		#region Publics
 		/// <summary>
 		/// Adds a time source.
@@ -89,34 +86,21 @@ namespace NTimeline.Core
 		/// <returns>List with all time periods. If there are no entries on the timeline, then an empty list will be returned.</returns>
 		public IList<TimePeriod> BuildTimePeriods()
 		{
-			IList<TimePeriod> listTimePeriod = new List<TimePeriod>();
-
-			if(this.TimeElements.Values.Count == 0) return listTimePeriod;
-
-			for(int i = 0; i < this.TimeElements.Values.Count; i++)
+			if(this.TimePeriodBuilder == null) throw new InvalidOperationException("No TimePeriodBuilder available.");
+			IList<TimePeriod> timePeriods = this.TimePeriodBuilder.BuildTimePeriods(this.TimeElements);
+			
+			IList<TimePeriod> result = new List<TimePeriod>();
+			foreach(TimePeriod timePeriod in timePeriods)
 			{
-				// If the current time element is a From and a Until date, then a one day period has to be created.
-				if(this.TimeElements.Values[i].IsFrom && this.TimeElements.Values[i].IsUntil)
+				IList<ITimeSource> sources = DetermineTimeSources(timePeriod.Duration);
+				if(sources != null && sources.Count > 0)
 				{
-					// Create time period for one day
-					TimePeriod timePeriodOneDay = CreateTimePeriod(this.TimeElements.Values[i], this.TimeElements.Values[i]);
-					if(timePeriodOneDay != null && !listTimePeriod.Contains(timePeriodOneDay)) listTimePeriod.Add(timePeriodOneDay);
+					timePeriod.TimeSources = sources;
+					result.Add(timePeriod);
 				}
-
-				TimeElement timeElementFrom = this.TimeElements.Values[i];
-
-				// The second element will only be set, if there exists another one.
-				TimeElement timeElementUntil = i < this.TimeElements.Count - 1 ? this.TimeElements.Values[i + 1] : null;
-
-				// if the second time element follows directly after the first time element, there is nothing to do.
-				if(timeElementUntil != null && timeElementFrom.Date.AddDays(1) == timeElementUntil.Date && timeElementFrom.IsUntil && timeElementUntil.IsFrom) continue;
-
-				// Create time period
-				TimePeriod timePeriod = CreateTimePeriod(timeElementFrom, timeElementUntil);
-				if(timePeriod != null && !listTimePeriod.Contains(timePeriod)) listTimePeriod.Add(timePeriod);
 			}
 
-			return listTimePeriod;
+			return result;
 		}
 
 		/// <summary>
@@ -127,9 +111,9 @@ namespace NTimeline.Core
 		public IList<TimePeriod> BuildTimePeriods(DateTime dtDate)
 		{
 			return (from timePeriod in BuildTimePeriods()
-			        let duration = timePeriod.Duration
-			        where duration.From <= dtDate && (duration.Until == null || dtDate <= duration.Until)
-			        select timePeriod).ToList();
+					let duration = timePeriod.Duration
+					where duration.From <= dtDate && (duration.Until == null || dtDate <= duration.Until)
+					select timePeriod).ToList();
 		}
 
 		/// <summary>
@@ -187,7 +171,7 @@ namespace NTimeline.Core
 				this.TimeElements.Add(timeElementNew.Date, timeElementNew);
 			}
 		}
-
+		
 		/// <summary>
 		/// Asks every time source if they are relevant during the duration.
 		/// </summary>
@@ -195,35 +179,18 @@ namespace NTimeline.Core
 		/// <returns>List of all relevant time sources</returns>
 		private IList<ITimeSource> DetermineTimeSources(Duration duration)
 		{
-			if(duration == null) throw new ArgumentNullException("duration");
+			if (duration == null) throw new ArgumentNullException("duration");
 
 			IList<ITimeSource> listTimeSource = new List<ITimeSource>();
-			foreach(ITimeSource timeSource in this.TimeSources)
+			foreach (ITimeSource timeSource in this.TimeSources)
 			{
-				if(timeSource.IsValid(duration) && !listTimeSource.Contains(timeSource))
+				if (timeSource.IsValid(duration) && !listTimeSource.Contains(timeSource))
 				{
 					listTimeSource.Add(timeSource);
 				}
 			}
 
 			return listTimeSource;
-		}
-
-		/// <summary>
-		/// Creates a time period and determin all relevant time sources.
-		/// </summary>
-		/// <param name="timeElementFrom">from time element</param>
-		/// <param name="timeElementUntil">until time element. Could be also empty.</param>
-		/// <returns>Created time period or null.</returns>
-		private TimePeriod CreateTimePeriod(TimeElement timeElementFrom, TimeElement timeElementUntil)
-		{
-			if(timeElementFrom == null) throw new ArgumentNullException("timeElementFrom");
-
-			TimePeriod timePeriod = timeElementUntil == null ? new TimePeriod(this, timeElementFrom) : new TimePeriod(this, timeElementFrom, timeElementUntil);
-
-			timePeriod.TimeSources = DetermineTimeSources(timePeriod.Duration);
-
-			return timePeriod.TimeSourcesView.Count == 0 ? null : timePeriod;
 		}
 		#endregion
 	}
