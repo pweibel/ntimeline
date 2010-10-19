@@ -15,6 +15,7 @@ namespace NTimeline.Core
 		#region Fields
 		private readonly TimeElement timeElementFrom;
 		private readonly TimeElement timeElementUntil;
+	    private readonly Duration duration;
 		private IList<ITimeSource> listTimeSources = new List<ITimeSource>();
 		#endregion
 
@@ -41,63 +42,26 @@ namespace NTimeline.Core
 		/// <returns>Duration</returns>
 		public Duration Duration
 		{
-			get
-			{
-				if(this.From == this.Until && !(this.From.IsFrom && this.From.IsUntil)) throw new Exception("Invalid state.");
-
-				// Special case: From and until date are the same
-				if(this.From == this.Until) return new Duration(this.From.Date, this.Until.Date);
-
-				return this.Until == null ? new Duration(this.FromPeriodDate) : new Duration(this.FromPeriodDate, this.UntilPeriodDate);
-			}
-		}
-
-		/// <summary>
-		/// Returns the relevant from date for the period.
-		/// </summary>
-		/// <returns>Correct from Date for the period</returns>
-		private DateTime FromPeriodDate
-		{
-			get
-			{
-				DateTime dtPeriodDate = this.From.Date;
-
-				if (this.From.IsUntil) dtPeriodDate = dtPeriodDate.AddDays(1);
-
-				return dtPeriodDate;
-			}
-		}
-
-		/// <summary>
-		/// Returns the relevant until date for the period.
-		/// </summary>
-		/// <returns>Correct until Date for the period</returns>
-		private DateTime UntilPeriodDate
-		{
-			get
-			{
-				DateTime dtPeriodDate = this.Until.Date;
-
-				if (this.Until.IsFrom) dtPeriodDate = dtPeriodDate.AddDays(-1);
-
-				return dtPeriodDate;
-			}
+			get { return duration; }
 		}
 		#endregion
 
 		#region Constructors
-		public TimePeriod(TimeElement timeElementFrom)
+		public TimePeriod(TimeElement timeElementFrom, Duration duration)
 		{
 			if(timeElementFrom == null) throw new ArgumentNullException("timeElementFrom");
+		    if(duration == null) throw new ArgumentNullException("duration");
 
-			this.timeElementFrom = timeElementFrom;
+		    this.timeElementFrom = timeElementFrom;
+		    this.duration = duration;
 		}
 
-		public TimePeriod(TimeElement timeElementFrom, TimeElement timeElementUntil) : this(timeElementFrom)
+		public TimePeriod(TimeElement timeElementFrom, TimeElement timeElementUntil, Duration duration) : this(timeElementFrom, duration)
 		{
 			if(timeElementFrom == null) throw new ArgumentNullException("timeElementFrom");
 			if(timeElementUntil == null) throw new ArgumentNullException("timeElementUntil");
-			if(timeElementFrom == timeElementUntil && !(timeElementUntil.IsFrom && timeElementUntil.IsUntil)) throw new Exception("Invalid state.");
+		    if(duration == null) throw new ArgumentNullException("duration");
+		    if(timeElementFrom == timeElementUntil && !(timeElementUntil.IsFrom && timeElementUntil.IsUntil)) throw new Exception("Invalid state.");
 
 			this.timeElementUntil = timeElementUntil;
 		}

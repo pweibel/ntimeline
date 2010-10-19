@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using Moq;
 using NTimeline.Core;
 using NTimeline.Helpers;
-using NTimeline.Source;
 using NUnit.Framework;
 
 namespace NTimeline.Test.Core
@@ -13,18 +11,18 @@ namespace NTimeline.Test.Core
 	{
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
-		public void TestTimePeriod_With_No_From()
+		public void TestTimePeriod_With_No_From_And_Duration()
 		{
 			// Act
-			new TimePeriod(null);
+			new TimePeriod(null,null);
 		}
 
 		[Test]
 		[ExpectedException(typeof(ArgumentNullException))]
-		public void TestTimePeriod_With_No_From_And_Until()
+		public void TestTimePeriod_With_No_From_And_Until_And_Duration()
 		{
 			// Act
-			new TimePeriod(null, null);
+			new TimePeriod(null, null, null);
 		}
 
 		[Test]
@@ -33,9 +31,10 @@ namespace NTimeline.Test.Core
 			// Arrange
 			DateTime dtFrom = DateTime.Now;
 			TimeElement elementFrom = new TimeElement(dtFrom, true);
+			var duration = new Mock<Duration>(DateTime.Now);
 
 			// Act
-			TimePeriod period = new TimePeriod(elementFrom);
+			TimePeriod period = new TimePeriod(elementFrom, duration.Object);
 
 			// Assert
 			Assert.AreEqual(elementFrom, period.From);
@@ -50,9 +49,10 @@ namespace NTimeline.Test.Core
 			TimeElement elementFrom = new TimeElement(dtFrom, true);
 			DateTime dtUntil = dtFrom.AddMonths(1);
 			TimeElement elementUntil = new TimeElement(dtUntil, false);
+			var duration = new Mock<Duration>(DateTime.Now);
 
 			// Act
-			TimePeriod period = new TimePeriod(elementFrom, elementUntil);
+			TimePeriod period = new TimePeriod(elementFrom, elementUntil, duration.Object);
 
 			// Assert
 			Assert.AreEqual(elementFrom, period.From);
@@ -66,9 +66,10 @@ namespace NTimeline.Test.Core
 			// Arrange
 			DateTime dtUntil = DateTime.Now;
 			TimeElement elementUntil = new TimeElement(dtUntil, false);
+			var duration = new Mock<Duration>(DateTime.Now);
 
 			// Act
-			new TimePeriod(null, elementUntil);
+			new TimePeriod(null, elementUntil, duration.Object);
 		}
 
 		[Test]
@@ -78,9 +79,10 @@ namespace NTimeline.Test.Core
 			// Arrange
 			DateTime dtFrom = DateTime.Now;
 			TimeElement elementFrom = new TimeElement(dtFrom, true);
+			var duration = new Mock<Duration>(DateTime.Now);
 
 			// Act
-			new TimePeriod(elementFrom, null);
+			new TimePeriod(elementFrom, null, duration.Object);
 		}
 
 		[Test]
@@ -89,9 +91,10 @@ namespace NTimeline.Test.Core
 			// Arrange
 			DateTime dtFrom = DateTime.Now;
 			TimeElement elementFrom = new TimeElement(dtFrom, true) { IsUntil = true };
+			var duration = new Mock<Duration>(DateTime.Now);
 
 			// Act
-			TimePeriod period = new TimePeriod(elementFrom, elementFrom);
+			TimePeriod period = new TimePeriod(elementFrom, elementFrom, duration.Object);
 
 			// Assert
 			Assert.AreEqual(elementFrom, period.From);
@@ -105,9 +108,10 @@ namespace NTimeline.Test.Core
 			// Arrange
 			DateTime dtFrom = DateTime.Now;
 			TimeElement elementFrom = new TimeElement(dtFrom, true);
+			var duration = new Mock<Duration>(DateTime.Now);
 
 			// Act
-			new TimePeriod(elementFrom, elementFrom);
+			new TimePeriod(elementFrom, elementFrom, duration.Object);
 		}
 
 		[Test]
@@ -117,25 +121,10 @@ namespace NTimeline.Test.Core
 			// Arrange
 			DateTime dtFrom = DateTime.Now;
 			TimeElement elementFrom = new TimeElement(dtFrom, false) { IsUntil = true };
+			var duration = new Mock<Duration>(DateTime.Now);
 
 			// Act
-			new TimePeriod(elementFrom, elementFrom);
-		}
-
-		[Test]
-		public void TestTimeSources()
-		{
-			// Arrange
-			var timeSourceMock1 = new Mock<ITimeSource>();
-			var timeSourceMock2 = new Mock<ITimeSource>();
-			IList<ITimeSource> listTimeSource = new List<ITimeSource> { timeSourceMock1.Object, timeSourceMock2.Object }; 
-			TimePeriod period = new TimePeriod(new TimeElement(DateTime.Now, true)) { TimeSources = listTimeSource };
-
-			// Act
-
-			// Assert
-			Assert.IsNotNull(period.TimeSources);
-			Assert.AreEqual(2, period.TimeSources.Count);
+			new TimePeriod(elementFrom, elementFrom, duration.Object);
 		}
 
 		[Test]
@@ -146,67 +135,15 @@ namespace NTimeline.Test.Core
 			TimeElement elementFrom = new TimeElement(dtFrom, true);
 			DateTime dtUntil = dtFrom.AddMonths(1);
 			TimeElement elementUntil = new TimeElement(dtUntil, false);
-			TimePeriod timePeriod = new TimePeriod(elementFrom, elementUntil);
+			var duration = new Mock<Duration>(DateTime.Now);
+			TimePeriod timePeriod = new TimePeriod(elementFrom, elementUntil, duration.Object);
 
 			// Act
-			Duration duration = timePeriod.Duration;
+			Duration duration1 = timePeriod.Duration;
 
 			// Assert
-			Assert.IsNotNull(duration);
-			Assert.IsTrue(duration.IsDuration);
-			Assert.AreEqual(dtFrom, duration.From);
-			Assert.AreEqual(dtUntil, duration.Until);
-		}
-
-		[Test]
-		public void TestDuration_With_Identical_From_And_Until()
-		{
-			// Arrange
-			DateTime dtFrom = DateTime.Now;
-			TimeElement elementFrom = new TimeElement(dtFrom, true) { IsUntil = true };
-			TimePeriod timePeriod = new TimePeriod(elementFrom, elementFrom);
-
-			// Act
-			Duration duration = timePeriod.Duration;
-
-			// Assert
-			Assert.IsNotNull(duration);
-			Assert.IsTrue(duration.IsDuration);
-			Assert.AreEqual(dtFrom, duration.From);
-			Assert.AreEqual(dtFrom, duration.Until);
-		}
-
-		[Test]
-		[ExpectedException(typeof(Exception))]
-		public void TestDuration_With_Invalid_State()
-		{
-			// Arrange
-			DateTime dtFrom = DateTime.Now;
-			TimeElement elementFrom = new TimeElement(dtFrom, true);
-			TimePeriod timePeriod = new TimePeriod(elementFrom, elementFrom);
-
-			// Act
-			var duration = timePeriod.Duration;
-
-			// Assert
-			Assert.Fail("Duration should throw an exception and the return value here should be null.", duration);
-		}
-
-		[Test]
-		public void TestDuration_With_Only_From()
-		{
-			// Arrange
-			DateTime dtFrom = DateTime.Now;
-			TimeElement elementFrom = new TimeElement(dtFrom, true);
-			TimePeriod timePeriod = new TimePeriod(elementFrom);
-
-			// Act
-			Duration duration = timePeriod.Duration;
-
-			// Assert
-			Assert.IsNotNull(duration);
-			Assert.IsFalse(duration.IsDuration);
-			Assert.AreEqual(dtFrom, duration.From);
+			Assert.IsNotNull(duration1);
+			Assert.AreEqual(duration.Object, duration1);
 		}
 	}
 }

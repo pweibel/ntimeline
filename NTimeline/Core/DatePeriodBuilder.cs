@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using NTimeline.Helpers;
 
 namespace NTimeline.Core
 {
@@ -55,9 +56,31 @@ namespace NTimeline.Core
         {
             if (timeElementFrom == null) throw new ArgumentNullException("timeElementFrom");
 
-            TimePeriod timePeriod = timeElementUntil == null ? new TimePeriod(timeElementFrom) : new TimePeriod(timeElementFrom, timeElementUntil);
+            Duration duration = BuildDuration(timeElementFrom, timeElementUntil);
+
+            TimePeriod timePeriod = timeElementUntil == null ? new TimePeriod(timeElementFrom, duration) : new TimePeriod(timeElementFrom, timeElementUntil, duration);
 
             return timePeriod;
+        }
+
+        /// <summary>
+        /// Creates a duration with the given time elements
+        /// </summary>
+        /// <param name="from">Begin time element of the duration</param>
+        /// <param name="until">End time elemnt of the duration. Could be null</param>
+        /// <returns>Duration between the two time elements</returns>
+        protected virtual Duration BuildDuration(TimeElement from, TimeElement until)
+        {
+            if(from == null) throw new ArgumentNullException("from");
+
+            // Special case: From and until date are the same
+            if(from == until) return new Duration(from.Date, until.Date);
+
+            DateTime dtFrom = from.IsUntil ? from.Date.AddDays(1) : from.Date;
+            DateTime? dtUntil = null;
+            if(until != null) dtUntil = until.IsFrom ? until.Date.AddDays(-1) : until.Date;
+
+            return until == null ? new Duration(dtFrom) : new Duration(dtFrom, dtUntil);
         }
         #endregion
     }
