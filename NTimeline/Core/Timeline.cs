@@ -12,7 +12,7 @@ namespace NTimeline.Core
 	public class Timeline
 	{
 		#region Fields
-		private readonly IList<ITimeSource> listTimeSources = new List<ITimeSource>();
+	    private readonly IList<ITimeSource> listTimeSources = new List<ITimeSource>();
 		private readonly SortedList<DateTime, TimeElement> listTimeElements = new SortedList<DateTime, TimeElement>();
 		#endregion
 
@@ -21,12 +21,12 @@ namespace NTimeline.Core
 
 		private IList<ITimeSource> TimeSources
 		{
-			get { return this.listTimeSources; }
+			get { return listTimeSources; }
 		}
 
 		private SortedList<DateTime, TimeElement> TimeElements
 		{
-			get { return this.listTimeElements;  }
+			get { return listTimeElements;  }
 		}
 		#endregion
 
