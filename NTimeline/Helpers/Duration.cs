@@ -29,5 +29,12 @@ namespace NTimeline.Helpers
 			this.Until = dtUntil;
 		}
 		#endregion
+
+		public override string ToString()
+		{
+			return this.Until == null
+					   ? string.Format("From {0} until endless.", this.From)
+					   : string.Format("From {0} until {1}", this.From, this.Until);
+		}
 	}
 }

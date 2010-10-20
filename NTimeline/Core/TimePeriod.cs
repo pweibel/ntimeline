@@ -66,5 +66,12 @@ namespace NTimeline.Core
 			this.timeElementUntil = timeElementUntil;
 		}
 		#endregion
+
+	    #region Publics
+	    public override string ToString()
+	    {
+	        return this.Duration.ToString();
+	    }
+	    #endregion
 	}
 }
