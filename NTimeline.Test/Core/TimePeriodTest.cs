@@ -14,7 +14,7 @@ namespace NTimeline.Test.Core
 		public void TestTimePeriod_With_No_From_And_Duration()
 		{
 			// Act
-			new TimePeriod(null,null);
+		    new TimePeriod(null, null);
 		}
 
 		[Test]
