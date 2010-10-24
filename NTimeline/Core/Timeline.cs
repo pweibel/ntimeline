@@ -49,6 +49,7 @@ namespace NTimeline.Core
         public void AddTimeSource(ITimeSource timeSource)
         {
             if(timeSource == null) throw new ArgumentNullException("timeSource");
+            if(timeSource.Timeline != null) throw new InvalidOperationException("Time source has already assigned to another timeline.");
 
             if(!this.TimeSources.Contains(timeSource))
             {
@@ -65,7 +66,10 @@ namespace NTimeline.Core
         {
             if(timeSource == null) throw new ArgumentNullException("timeSource");
 
-            this.TimeSources.Remove(timeSource);
+            if (this.TimeSources.Contains(timeSource))
+            {
+                this.TimeSources.Remove(timeSource);
+            }
         }
 
         /// <summary>
