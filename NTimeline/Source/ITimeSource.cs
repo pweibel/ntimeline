@@ -13,7 +13,7 @@ namespace NTimeline.Source
 		/// <summary>
 		/// Timeline where this source is registered.
 		/// </summary>
-		Timeline Timeline { get; }
+		Timeline Timeline { get; set; }
 
 		/// <summary>
 		/// Creates a list of time elements.

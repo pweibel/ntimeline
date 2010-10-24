@@ -15,8 +15,9 @@ namespace NTimeline.Test.Visitor
         public void TestAccept()
         {
             // Arrange
+            TestSource source = new TestSource();
             Timeline timeline = new Timeline();
-            TestSource source = new TestSource(timeline);
+            timeline.AddTimeSource(source);
             timeline.Generate();
             ConsoleVisitor visitor = new ConsoleVisitor();
 
@@ -24,7 +25,7 @@ namespace NTimeline.Test.Visitor
             timeline.Accept(visitor);
 
             // Assert
-            Assert.AreEqual(2, timeline.BuildTimePeriods().Count);
+            Assert.AreEqual(2, timeline.TimePeriods.Count);
         }
 
         #region Private Class
@@ -38,10 +39,6 @@ namespace NTimeline.Test.Visitor
 
         private class TestSource : TimeSourceBase
         {
-            public TestSource(Timeline timeline) : base(timeline)
-            {
-            }
-
             public override IList<TimeElement> CreateTimeElements()
             {
                 return new List<TimeElement>

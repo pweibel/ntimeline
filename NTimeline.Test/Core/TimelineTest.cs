@@ -77,12 +77,12 @@ namespace NTimeline.Test.Core
 			timeline.Generate();
 
 			// Assert
-			Assert.AreEqual(dtFrom, timeline.BuildTimePeriods()[0].From.Date);
-			Assert.IsNull(timeline.BuildTimePeriods()[0].Until);
+			Assert.AreEqual(dtFrom, timeline.TimePeriods[0].From.Date);
+			Assert.IsNull(timeline.TimePeriods[0].Until);
 		}
 
 		[Test]
-		public void TestBuildTimePeriods()
+		public void TestTimePeriods()
 		{
 			// Arrange
 			Timeline timeline = new Timeline();
@@ -94,7 +94,7 @@ namespace NTimeline.Test.Core
 			timeline.Generate();
 
 			// Act
-			IList<TimePeriod> periods = timeline.BuildTimePeriods();
+			IList<TimePeriod> periods = timeline.TimePeriods;
 
 			// Assert
 			Assert.AreEqual(1, periods.Count);
@@ -103,7 +103,7 @@ namespace NTimeline.Test.Core
 		}
 
 		[Test]
-		public void TestBuildTimePeriods_With_Date_In_Period()
+		public void TestGetTimePeriods_With_Date_In_Period()
 		{
 			// Arrange
 			Timeline timeline = new Timeline();
@@ -115,7 +115,7 @@ namespace NTimeline.Test.Core
 			timeline.Generate();
 
 			// Act
-			IList<TimePeriod> periods = timeline.BuildTimePeriods(dtFrom);
+			IList<TimePeriod> periods = timeline.GetTimePeriods(dtFrom);
 
 			// Assert
 			Assert.AreEqual(1, periods.Count);
@@ -124,7 +124,7 @@ namespace NTimeline.Test.Core
 		}
 
 		[Test]
-		public void TestBuildTimePeriods_With_Date_Before_Period()
+		public void TestGetTimePeriods_With_Date_Before_Period()
 		{
 			// Arrange
 			Timeline timeline = new Timeline();
@@ -136,7 +136,7 @@ namespace NTimeline.Test.Core
 			timeline.Generate();
 
 			// Act
-			IList<TimePeriod> periods = timeline.BuildTimePeriods(dtFrom.AddDays(-5));
+			IList<TimePeriod> periods = timeline.GetTimePeriods(dtFrom.AddDays(-5));
 
 			// Assert
 			Assert.AreEqual(0, periods.Count);

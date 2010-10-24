@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 using NTimeline.Core;
 using NTimeline.Helpers;
@@ -11,17 +10,7 @@ namespace NTimeline.Source
 		#region Properties
 		public Timeline Timeline
 		{
-			get; private set;
-		}
-		#endregion
-
-		#region Constructors
-		protected TimeSourceBase(Timeline timeline)
-		{
-			if(timeline == null) throw new ArgumentNullException("timeline");
-
-			this.Timeline = timeline;
-			this.Timeline.AddTimeSource(this);
+			get; set;
 		}
 		#endregion
 

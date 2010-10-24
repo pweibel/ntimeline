@@ -42,8 +42,8 @@
   <ItemGroup>
     <Compile Include="Core\ITimePeriodBuilder.cs" />
     <Compile Include="Core\DatePeriodBuilder.cs" />
-    <Compile Include="Visitor\ITimelineVisitor.cs" />
     <Compile Include="Source\TimeSourceBase.cs" />
+    <Compile Include="Visitor\ITimelineVisitor.cs" />
     <Compile Include="Helpers\Duration.cs" />
     <Compile Include="Source\ITimeSource.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
