@@ -18,7 +18,7 @@ namespace NTimeline.Test.Visitor
             TestSource source = new TestSource();
             Timeline timeline = new Timeline();
             timeline.AddTimeSource(source);
-            timeline.Generate();
+            timeline.Build();
             ConsoleVisitor visitor = new ConsoleVisitor();
 
             // Act

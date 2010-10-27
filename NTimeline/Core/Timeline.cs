@@ -73,9 +73,9 @@ namespace NTimeline.Core
         }
 
         /// <summary>
-        /// Get all the time elements of every time source and add them to the timeline.
+        /// Collects all the time elements of the registered time sources and build the time periods with the help of the time period builder.
         /// </summary>
-        public void Generate()
+        public void Build()
         {
             // Clear current time elements
             this.TimeElements.Clear();

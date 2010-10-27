@@ -63,7 +63,7 @@ namespace NTimeline.Test.Core
 		}
 
 		[Test]
-		public void TestGenerate()
+		public void TestBuild()
 		{
 			// Arrange
 			Timeline timeline = new Timeline();
@@ -74,7 +74,7 @@ namespace NTimeline.Test.Core
 			timeline.AddTimeSource(source.Object);
 
 			// Act
-			timeline.Generate();
+			timeline.Build();
 
 			// Assert
 			Assert.AreEqual(dtFrom, timeline.TimePeriods[0].From.Date);
@@ -91,7 +91,7 @@ namespace NTimeline.Test.Core
 			source.Setup(x => x.CreateTimeElements()).Returns(new List<TimeElement> { new TimeElement(dtFrom, true) });
 			source.Setup(x => x.IsValid(It.IsAny<Duration>())).Returns(true);
 			timeline.AddTimeSource(source.Object);
-			timeline.Generate();
+			timeline.Build();
 
 			// Act
 			IList<TimePeriod> periods = timeline.TimePeriods;
@@ -112,7 +112,7 @@ namespace NTimeline.Test.Core
 			source.Setup(x => x.CreateTimeElements()).Returns(new List<TimeElement> { new TimeElement(dtFrom, true) });
 			source.Setup(x => x.IsValid(It.IsAny<Duration>())).Returns(true);
 			timeline.AddTimeSource(source.Object);
-			timeline.Generate();
+			timeline.Build();
 
 			// Act
 			IList<TimePeriod> periods = timeline.GetTimePeriods(dtFrom);
@@ -133,7 +133,7 @@ namespace NTimeline.Test.Core
 			source.Setup(x => x.CreateTimeElements()).Returns(new List<TimeElement> { new TimeElement(dtFrom, true) });
 			source.Setup(x => x.IsValid(It.IsAny<Duration>())).Returns(true);
 			timeline.AddTimeSource(source.Object);
-			timeline.Generate();
+			timeline.Build();
 
 			// Act
 			IList<TimePeriod> periods = timeline.GetTimePeriods(dtFrom.AddDays(-5));
