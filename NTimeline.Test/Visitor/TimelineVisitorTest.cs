@@ -12,7 +12,7 @@ namespace NTimeline.Test.Visitor
     public class TimelineVisitorTest
     {
         [Test]
-        public void TestAccept()
+        public void TestVisitTimePeriods()
         {
             // Arrange
             TestSource source = new TestSource();
@@ -22,7 +22,24 @@ namespace NTimeline.Test.Visitor
             ConsoleVisitor visitor = new ConsoleVisitor();
 
             // Act
-            timeline.Accept(visitor);
+            timeline.VisitTimePeriods(visitor);
+
+            // Assert
+            Assert.AreEqual(2, timeline.TimePeriods.Count);
+        }
+
+        [Test]
+        public void TestVisitTimePeriodsInReverseOrder()
+        {
+            // Arrange
+            TestSource source = new TestSource();
+            Timeline timeline = new Timeline();
+            timeline.AddTimeSource(source);
+            timeline.Build();
+            ConsoleVisitor visitor = new ConsoleVisitor();
+
+            // Act
+            timeline.VisitTimePeriodsInReverseOrder(visitor);
 
             // Assert
             Assert.AreEqual(2, timeline.TimePeriods.Count);

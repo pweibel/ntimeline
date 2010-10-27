@@ -112,9 +112,10 @@ namespace NTimeline.Core
         /// Loops through all time periods of the timeline in chronological order.
         /// </summary>
         /// <param name="timelineVisitor">Visitor</param>
-        public void Accept(ITimelineVisitor timelineVisitor)
+        public void VisitTimePeriods(ITimelineVisitor timelineVisitor)
         {
             if(timelineVisitor == null) throw new ArgumentNullException("timelineVisitor");
+            if(this.timePeriods.Count == 0) return;
 
             foreach(TimePeriod period in this.timePeriods)
             {
@@ -123,17 +124,17 @@ namespace NTimeline.Core
         }
 
         /// <summary>
-        /// Loops through all time periods of the timeline in chronological order starting at the given Date.
+        /// Loops through all time periods of the timeline in reverse chronological order.
         /// </summary>
         /// <param name="timelineVisitor">Visitor</param>
-        /// <param name="dtDate">All valid and future periods will be visited</param>
-        public void Accept(ITimelineVisitor timelineVisitor, DateTime dtDate)
+        public void VisitTimePeriodsInReverseOrder(ITimelineVisitor timelineVisitor)
         {
             if(timelineVisitor == null) throw new ArgumentNullException("timelineVisitor");
+            if(this.timePeriods.Count == 0) return;
 
-            foreach(TimePeriod period in GetTimePeriods(dtDate))
+            for(int i = this.timePeriods.Count - 1; i >= 0; i--)
             {
-                timelineVisitor.Visit(period);
+                timelineVisitor.Visit(this.timePeriods[i]);
             }
         }
         #endregion
